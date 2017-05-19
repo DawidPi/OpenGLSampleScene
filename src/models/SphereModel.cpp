@@ -8,7 +8,7 @@
 #include <iostream>
 #include "SphereModel.hpp"
 
-SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int rows, unsigned int cols) : mColor(color, 1.0f) {
+SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int rows, unsigned int cols) {
     auto longitudeStep = 2*glm::pi<GLfloat>()/cols;
     auto latitudeStep = 2*glm::pi<GLfloat>()/rows;
     for(float longitude=0.0f; longitude <= 2*glm::pi<GLfloat>(); longitude += longitudeStep){

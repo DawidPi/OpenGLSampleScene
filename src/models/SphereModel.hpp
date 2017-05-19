@@ -17,7 +17,6 @@ public:
     void draw(GLuint program, const glm::mat4 &model);
 
 private:
-    glm::vec4 mColor;
     std::vector<glm::vec4> mVertices;
 
     GLuint mVao;
