@@ -474,7 +474,7 @@ GLFWAPI void glfwSetWindowPos(GLFWwindow* handle, int xpos, int ypos)
     _glfwPlatformSetWindowPos(window, xpos, ypos);
 }
 
-GLFWAPI void glfwGetWindowSize(GLFWwindow* handle, int* width, int* height)
+GLFWAPI void glfwGetWindowSize(const GLFWwindow *handle, int *width, int *height)
 {
     _GLFWwindow* window = (_GLFWwindow*) handle;
     assert(window != NULL);

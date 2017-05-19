@@ -2055,7 +2055,7 @@ GLFWAPI void glfwSetWindowPos(GLFWwindow* window, int xpos, int ypos);
  *
  *  @ingroup window
  */
-GLFWAPI void glfwGetWindowSize(GLFWwindow* window, int* width, int* height);
+GLFWAPI void glfwGetWindowSize(const GLFWwindow *window, int *width, int *height);
 
 /*! @brief Sets the size limits of the specified window.
  *
