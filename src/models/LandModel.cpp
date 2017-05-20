@@ -68,8 +68,12 @@ void LandModel::init() {
 void LandModel::draw(GLuint program, const glm::mat4 &model) {
     glBindVertexArray(mVao);
 
-    auto uniformLocation = glGetUniformLocation(program, "model");
+    auto uniformLocation = glGetUniformLocation(program, "useLighting");
+    glUniform1ui(uniformLocation, true);
+
+    uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices().size()), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

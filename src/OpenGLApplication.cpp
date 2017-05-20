@@ -97,7 +97,7 @@ glm::mat4 OpenGLApplication::rightCubeModel() const {
 
 glm::mat4 OpenGLApplication::sphereModel() {
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 5.0f, 20.0f));
     return model;
 }
 
@@ -118,7 +118,7 @@ void OpenGLApplication::clearWindow() const {
     glClear(GL_COLOR_BUFFER_BIT);
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.2f, 0.2f, 0.4f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void OpenGLApplication::processButtons() {

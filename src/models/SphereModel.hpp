@@ -17,7 +17,7 @@ public:
     void draw(GLuint program, const glm::mat4 &model);
 
 private:
-    std::vector<glm::vec4> mVertices;
+    std::vector<GLfloat> mVertices;
 
     GLuint mVao;
     GLuint mSphereBuffer;
@@ -25,7 +25,7 @@ private:
     GLuint mSphereColorBuffer;
     GLuint mSphereNormalsBuffer;
 
-    std::vector<glm::vec4> &vertices();
+    std::vector<GLfloat> &vertices();
     std::vector<glm::vec4> mColors;
 
     std::vector<glm::vec4> &colors();
