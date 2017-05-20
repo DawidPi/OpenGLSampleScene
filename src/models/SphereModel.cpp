@@ -86,7 +86,7 @@ void SphereModel::draw(GLuint program, const glm::mat4 &model) {
     glCullFace(GL_FRONT);
 
     auto uniformLocation = glGetUniformLocation(program, "useLighting");
-    glUniform1ui(uniformLocation, true);
+    glUniform1ui(uniformLocation, GL_TRUE);
 
     uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
