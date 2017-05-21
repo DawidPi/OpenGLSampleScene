@@ -17,6 +17,7 @@ public:
 private:
     glm::mat4 mProj;
     glm::mat4 mView;
+    glm::vec4 mCameraPos;
 };
 
 

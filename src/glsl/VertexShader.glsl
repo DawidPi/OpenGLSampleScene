@@ -7,6 +7,8 @@ uniform mat4 view;
 uniform mat4 model;
 uniform vec4 lightPosition;
 uniform bool useLighting;
+uniform bool isLightSource;
+uniform vec4 cameraPosition;
 
 layout (location = 1) in vec4 color;
 layout (location = 0) in vec4 position;
@@ -23,9 +25,15 @@ void main() {
 
     if(useLighting){
         vec4 normal_position = model*normal;
-        float foo = dot(normalize(lightPosition - (model*position)), normalize(normal_position));
+        float lightingFactor = dot(normalize(lightPosition - (model*position)), normalize(normal_position));
 
-        fragmentColor = color*foo;
+        if(isLightSource){
+            float lightingFactor = dot(normalize(cameraPosition - (model*position)), normalize(normal_position));
+            fragmentColor = vec4(color.xyz, lightingFactor - 20*(1.0f - lightingFactor));
+        } else{
+            float lightingFactor = dot(normalize(lightPosition - (model*position)), normalize(normal_position));
+            fragmentColor = vec4(color.xyz * lightingFactor, 1.0f);
+        }
     } else {
         fragmentColor = color;
     }

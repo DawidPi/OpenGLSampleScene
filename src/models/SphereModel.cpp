@@ -12,6 +12,8 @@ SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int row
     auto colStep = 2*glm::pi<GLfloat>()/cols;
     auto rowStep = 2*glm::pi<GLfloat>()/rows;
 
+    const glm::vec4 finalColor(color, 1.0f);
+
     for(float currentRow =0.0f; currentRow <= 2*glm::pi<GLfloat>(); currentRow += rowStep){
         for(float currentCol=0.0f; currentCol <= 2*glm::pi<GLfloat>(); currentCol += colStep){
 
@@ -24,7 +26,7 @@ SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int row
             mVertices.push_back(z);
             mVertices.push_back(1.0f);
             mNormals.push_back(glm::vec4(x,y,z,0.0f));
-            mColors.push_back(glm::vec4(color, 1.0f));
+            mColors.push_back(finalColor);
 
             x = radius*sin(currentRow)*cos(currentCol);
             y = radius*cos(currentRow);
@@ -35,7 +37,7 @@ SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int row
             mVertices.push_back(z);
             mVertices.push_back(1.0f);
             mNormals.push_back(glm::vec4(x,y,z,0.0f));
-            mColors.push_back(glm::vec4(color, 1.0f));
+            mColors.push_back(finalColor);
         }
     }
 }
@@ -83,12 +85,7 @@ std::vector<glm::vec4> &SphereModel::normals() {
 void SphereModel::draw(GLuint program, const glm::mat4 &model) {
     glBindVertexArray(mVao);
 
-    glCullFace(GL_FRONT);
-
-    auto uniformLocation = glGetUniformLocation(program, "useLighting");
-    glUniform1ui(uniformLocation, GL_TRUE);
-
-    uniformLocation = glGetUniformLocation(program, "model");
+    auto uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei) (vertices().size()));

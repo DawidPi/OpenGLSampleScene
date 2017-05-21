@@ -8,14 +8,18 @@
 
 #include <glm/vec3.hpp>
 #include <glad/glad.h>
+#include <SphereModel.hpp>
 
 class PointLight {
 public:
-    PointLight(glm::vec3 lightPosition);
-    void placeLight(GLuint program);
+    PointLight();
+    void init();
+    void placeLight(GLuint program, const glm::vec4 &lightPosition, const glm::vec4 &cameraPosition);
+    void draw(GLuint program, const glm::vec4 &cameraPosition);
 
 private:
-    glm::vec3 mLightPosition;
+    SphereModel mLightBulb;
+    glm::vec4 mLightPosition;
 };
 
 

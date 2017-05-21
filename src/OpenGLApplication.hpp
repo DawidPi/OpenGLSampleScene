@@ -15,13 +15,15 @@
 #include <SphereModel.hpp>
 #include "OpenGLWindow.hpp"
 #include "StepperInterploator.hpp"
+#include "light/PointLight.hpp"
 
 class OpenGLApplication : public OpenGLWindow {
 public:
     OpenGLApplication() :
             mMouseCursorPosition(0,0),
             mStepper(std::chrono::milliseconds(20)),
-            mSphere(glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 40, 40){}
+            mSphere(glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 40, 40),
+            mLightSource(){}
 
     void init() override;
 
@@ -45,6 +47,7 @@ private:
 
     GLuint mGlProgram;
     GLuint mVertexShader;
+    GLuint mVertexLightingSourceShader;
     GLuint mFragmentShader;
 
     void processGLError();
@@ -88,6 +91,7 @@ private:
     glm::vec3 currentPosition();
 
     glm::mat4 sphereModel();
+    PointLight mLightSource;
 };
 
 

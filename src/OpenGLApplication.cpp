@@ -19,13 +19,14 @@ void OpenGLApplication::init() {
     mCube.init();
     mLand.init();
     mSphere.init();
+    mLightSource.init();
 
     mTime = std::chrono::system_clock::now();
 }
 
 void OpenGLApplication::openGLCommonSettings() const {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glCullFace(GL_FRONT_AND_BACK);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 }
@@ -52,18 +53,20 @@ void OpenGLApplication::render(GLFWwindow *window) {
     processButtons();
 
     glUseProgram(mGlProgram);
-
-    PointLight light(glm::vec3(0.0f, 5.0f, 0.0f));
-    light.placeLight(mGlProgram);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glm::vec3 position = currentPosition();
     Camera camera(position, static_cast<float>(getWidth())/getHeight(), mRotationX, mRotationY);
     camera.placeCamera(mGlProgram);
 
+    mLightSource.placeLight(mGlProgram, glm::vec4(0.0f, 3.0f, 5.0f, 1.0f), glm::vec4(currentPosition(),1.0f));
+
     mCube.draw(mGlProgram, rightCubeModel());
     mCube.draw(mGlProgram, leftCubeModel());
     mLand.draw(mGlProgram, landModel());
     mSphere.draw(mGlProgram, sphereModel());
+    mLightSource.draw(mGlProgram, glm::vec4(position, 1.0f));
 
 }
 

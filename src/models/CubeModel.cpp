@@ -41,10 +41,7 @@ void CubeModel::init() {
 void CubeModel::draw(GLuint program, const glm::mat4 &model) {
     glBindVertexArray(mVao);
 
-    auto uniformLocation = glGetUniformLocation(program, "useLighting");
-    glUniform1ui(uniformLocation, true);
-
-    uniformLocation = glGetUniformLocation(program, "model");
+    auto uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
     glDrawArrays(GL_TRIANGLES, 0, (GLsizei) vertexBufferPrim.size());
@@ -52,47 +49,47 @@ void CubeModel::draw(GLuint program, const glm::mat4 &model) {
 }
 
 const std::vector<GLfloat> CubeModel::colorBuffer{
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
 
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
 
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
 
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
 
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
 
-        0.0f, 0.0f, 1.f, 0,
-        1.0f, 0.0f, 0.0f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
-        0.0f, 1.f, 0.0f, 0,
-        0.0f, 0.0f, 1.f, 0,
+        0.0f, 0.0f, 1.f, 1,
+        1.0f, 0.0f, 0.0f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
+        0.0f, 1.f, 0.0f, 1,
+        0.0f, 0.0f, 1.f, 1,
 };
 
 
