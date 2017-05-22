@@ -14,6 +14,7 @@ layout (location = 1) in vec4 color;
 layout (location = 0) in vec4 position;
 layout (location = 2) in vec4 normal;
 
+out vec2 fs_texCoords;
 out vec4 fragmentColor;
 
 
@@ -29,12 +30,16 @@ void main() {
 
         if(isLightSource){
             float lightingFactor = dot(normalize(cameraPosition - (model*position)), normalize(normal_position));
-            fragmentColor = vec4(color.xyz, lightingFactor - 20*(1.0f - lightingFactor));
+            fragmentColor = vec4(color.xyz, lightingFactor);
         } else{
             float lightingFactor = dot(normalize(lightPosition - (model*position)), normalize(normal_position));
+            if(lightingFactor < 0.40)
+                lightingFactor=0.40;
             fragmentColor = vec4(color.xyz * lightingFactor, 1.0f);
         }
     } else {
         fragmentColor = color;
     }
+
+    fs_texCoords = position.xz;
 }

@@ -4,6 +4,7 @@
 
 #include <glm/ext.hpp>
 #include "LandModel.hpp"
+#include "../Texture.hpp"
 
 const std::vector<GLfloat> LandModel::vertexBuffer{
         -10.0f, 0.0f, -10.0f, 1.0f,
@@ -58,6 +59,9 @@ void LandModel::init() {
     glBufferData(GL_ARRAY_BUFFER, normals().size() * sizeof(GLfloat), normals().data(), GL_STATIC_DRAW);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
+    Texture textureReader;
+    auto textureId = textureReader.load("textures/groundSeamlessTexture.png");
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -71,6 +75,12 @@ void LandModel::draw(GLuint program, const glm::mat4 &model) {
     auto uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
+    uniformLocation = glGetUniformLocation(program, "useTexture");
+    glUniform1i(uniformLocation, GL_TRUE);
+
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices().size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    uniformLocation = glGetUniformLocation(program, "useTexture");
+    glUniform1i(uniformLocation, GL_FALSE);
 }

@@ -14,8 +14,8 @@ class PointLight {
 public:
     PointLight();
     void init();
-    void placeLight(GLuint program, const glm::vec4 &lightPosition, const glm::vec4 &cameraPosition);
-    void draw(GLuint program, const glm::vec4 &cameraPosition);
+    void placeLight(GLuint program, const glm::vec4 &lightPosition);
+    void draw(GLuint program);
 
 private:
     SphereModel mLightBulb;

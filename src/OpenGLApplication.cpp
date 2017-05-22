@@ -8,6 +8,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/ext.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 #include "OpenGLApplication.hpp"
 #include "ShaderNecromanter.hpp"
 #include "world/Camera.hpp"
@@ -27,6 +28,8 @@ void OpenGLApplication::init() {
 void OpenGLApplication::openGLCommonSettings() const {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 }
@@ -53,20 +56,23 @@ void OpenGLApplication::render(GLFWwindow *window) {
     processButtons();
 
     glUseProgram(mGlProgram);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glm::vec3 position = currentPosition();
     Camera camera(position, static_cast<float>(getWidth())/getHeight(), mRotationX, mRotationY);
     camera.placeCamera(mGlProgram);
 
-    mLightSource.placeLight(mGlProgram, glm::vec4(0.0f, 3.0f, 5.0f, 1.0f), glm::vec4(currentPosition(),1.0f));
+    glm::mat4 lightModel(1.0f);
+    lightModel = glm::rotate(lightModel, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    lightModel = glm::rotate(lightModel, 0.5f*timeDiff(), glm::vec3(1.0f, 0.0f, 0.0f));
+    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 0.0f, 200.0f));
+
+    mLightSource.placeLight(mGlProgram, glm::vec4(lightModel[3]));
 
     mCube.draw(mGlProgram, rightCubeModel());
     mCube.draw(mGlProgram, leftCubeModel());
     mLand.draw(mGlProgram, landModel());
     mSphere.draw(mGlProgram, sphereModel());
-    mLightSource.draw(mGlProgram, glm::vec4(position, 1.0f));
+    mLightSource.draw(mGlProgram);
 
 }
 
@@ -100,7 +106,9 @@ glm::mat4 OpenGLApplication::rightCubeModel() const {
 
 glm::mat4 OpenGLApplication::sphereModel() {
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 5.0f, 20.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 25.0f));
+    model = glm::rotate(model, timeDiff(), glm::vec3(0.0f,1.0f,0.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 10.0f, 10.0f));
     return model;
 }
 
@@ -121,7 +129,7 @@ void OpenGLApplication::clearWindow() const {
     glClear(GL_COLOR_BUFFER_BIT);
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 5.0f, 0.0f);
 }
 
 void OpenGLApplication::processButtons() {
