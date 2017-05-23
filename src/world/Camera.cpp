@@ -19,6 +19,7 @@ Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotatio
             );
 
     mCameraPos = glm::vec4(cameraPosition,1.0f);
+    mLookDirection = rotationYMatrix * glm::vec4(cameraPosition + glm::vec3(0.0f,0.0f,1000.0f),1.0f);
 }
 
 void Camera::placeCamera(GLuint program) {
@@ -30,4 +31,7 @@ void Camera::placeCamera(GLuint program) {
 
     uniformLocation = glGetUniformLocation(program, "cameraPosition");
     glUniform4fv(uniformLocation, 1, glm::value_ptr(mCameraPos));
+
+    uniformLocation = glGetUniformLocation(program, "lookDirection");
+    glUniform4fv(uniformLocation, 1, glm::value_ptr(mLookDirection));
 }

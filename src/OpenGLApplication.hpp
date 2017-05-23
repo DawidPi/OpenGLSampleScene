@@ -22,7 +22,7 @@ public:
     OpenGLApplication() :
             mMouseCursorPosition(0,0),
             mStepper(std::chrono::milliseconds(20)),
-            mSphere(glm::vec3(1.0f, 1.0f, 0.0f), 1.0f, 40, 40),
+            mSphere(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 40, 40),
             mLightSource(){}
 
     void init() override;

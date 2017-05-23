@@ -72,6 +72,7 @@ void OpenGLApplication::render(GLFWwindow *window) {
     mCube.draw(mGlProgram, leftCubeModel());
     mLand.draw(mGlProgram, landModel());
     mSphere.draw(mGlProgram, sphereModel());
+    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
     mLightSource.draw(mGlProgram);
 
 }

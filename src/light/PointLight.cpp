@@ -17,10 +17,7 @@ void PointLight::placeLight(GLuint program, const glm::vec4 &lightPosition) {
 
     mLightPosition = lightPosition;
 
-    auto uniformLocation = glGetUniformLocation(program, "useLighting");
-    glUniform1ui(uniformLocation, GL_TRUE);
-
-    uniformLocation = glGetUniformLocation(program, "isLightSource");
+    auto uniformLocation = glGetUniformLocation(program, "isLightSource");
     glUniform1ui(uniformLocation, GL_FALSE);
 
     uniformLocation = glGetUniformLocation(program, "lightPosition");
