@@ -22,6 +22,9 @@ void PointLight::placeLight(GLuint program, const glm::vec4 &lightPosition) {
 
     uniformLocation = glGetUniformLocation(program, "lightPosition");
     glUniform4fv(uniformLocation, 1, glm::value_ptr(lightPosition));
+
+    uniformLocation = glGetUniformLocation(program, "lightColor");
+    glUniform3fv(uniformLocation, 1, glm::value_ptr(glm::vec3(1.0f,1.0f,1.0f)));
 }
 
 void PointLight::draw(GLuint program) {

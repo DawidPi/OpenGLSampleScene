@@ -16,6 +16,8 @@
 #include "OpenGLWindow.hpp"
 #include "StepperInterploator.hpp"
 #include "light/PointLight.hpp"
+#include "framebuffers/HDRFramebuffer.hpp"
+#include "GLPrograms/HDRProgram.hpp"
 
 class OpenGLApplication : public OpenGLWindow {
 public:
@@ -50,7 +52,6 @@ private:
     GLuint mVertexLightingSourceShader;
     GLuint mFragmentShader;
 
-    void processGLError();
 
     bool mMouseButtonPressed=false;
     MousePosition mMouseCursorPosition;
@@ -92,6 +93,8 @@ private:
 
     glm::mat4 sphereModel();
     PointLight mLightSource;
+    HDRFramebuffer mHDRFramebuffer;
+    HDRProgram mHDRProgram;
 };
 
 

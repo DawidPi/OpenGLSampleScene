@@ -12,6 +12,7 @@ uniform bool isLightSource;
 uniform vec4 cameraPosition;
 uniform vec4 lookDirection;
 uniform vec4 lightPosition;
+uniform vec3 lightColor;
 uniform sampler2D fs_texture;
 
 out vec4 fs_color;
@@ -43,11 +44,10 @@ void main(void)
         float reflectFactor = dot(eyeDirection, reflection);
         reflectFactor = max(0.0, reflectFactor);
 
-        vec3 lightColor = vec3(1.0, 1.0, 1.0);
-        float lightPower = 30000;
+        float lightPower = 300000;
         vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight,2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
-        vec3 specularColor = commonColor * pow(reflectFactor, 199) * lightPower*0.3/(0.75*distance(cameraPosition, worldPosition));
+        vec3 specularColor = commonColor * pow(reflectFactor, 199) * lightPower*0.3/(1*distance(cameraPosition, worldPosition));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);
     }
 }

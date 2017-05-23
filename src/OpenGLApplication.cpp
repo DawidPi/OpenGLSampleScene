@@ -13,14 +13,17 @@
 #include "ShaderNecromanter.hpp"
 #include "world/Camera.hpp"
 #include "light/PointLight.hpp"
+#include "glErrorCheck.hpp"
 
 void OpenGLApplication::init() {
     createOpenGLProgram();
     openGLCommonSettings();
     mCube.init();
     mLand.init();
+    processGLError();
     mSphere.init();
     mLightSource.init();
+    mHDRProgram.init(mHDRFramebuffer);
 
     mTime = std::chrono::system_clock::now();
 }
@@ -57,6 +60,12 @@ void OpenGLApplication::render(GLFWwindow *window) {
 
     glUseProgram(mGlProgram);
 
+    int width = 0;
+    int height = 0;
+    glfwGetWindowSize(window, &width, &height);
+    mHDRFramebuffer.init(width, height);
+    mHDRFramebuffer.attachFramebuffer();
+
     glm::vec3 position = currentPosition();
     Camera camera(position, static_cast<float>(getWidth())/getHeight(), mRotationX, mRotationY);
     camera.placeCamera(mGlProgram);
@@ -74,6 +83,8 @@ void OpenGLApplication::render(GLFWwindow *window) {
     mSphere.draw(mGlProgram, sphereModel());
     mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
     mLightSource.draw(mGlProgram);
+
+    mHDRProgram.launch(width, height);
 
 }
 
@@ -237,25 +248,5 @@ void OpenGLApplication::onCursorPositionChanged(double xPosition, double yPositi
     }
 
     mMouseCursorPosition = currentMousePosition;
-}
-
-#define CASE( errorCase ) case errorCase: std::cout << #errorCase << std::endl; break;
-
-void OpenGLApplication::processGLError() {
-    auto error = glGetError();
-    switch (error){
-
-        CASE(GL_INVALID_ENUM)
-
-        CASE(GL_INVALID_VALUE)
-
-        CASE(GL_INVALID_OPERATION)
-
-        CASE(GL_INVALID_FRAMEBUFFER_OPERATION)
-
-        CASE(GL_OUT_OF_MEMORY)
-
-        default: std::cout << "No error recognized" << std::endl;
-    }
 }
 
