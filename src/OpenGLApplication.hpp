@@ -14,19 +14,19 @@
 #include <LandModel.hpp>
 #include <SphereModel.hpp>
 #include <QuadModel.hpp>
+#include <SkyBox.hpp>
 #include "OpenGLWindow.hpp"
 #include "StepperInterploator.hpp"
 #include "light/PointLight.hpp"
 #include "framebuffers/HDRFramebuffer.hpp"
 #include "GLPrograms/HDRProgram.hpp"
+#include "GLPrograms/ObjectsRenderingProgram.hpp"
 
 class OpenGLApplication : public OpenGLWindow {
 public:
     OpenGLApplication() :
             mMouseCursorPosition(0,0),
-            mStepper(std::chrono::milliseconds(20)),
-            mSphere(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 50, 50),
-            mLightSource(){}
+            mStepper(std::chrono::milliseconds(20)){}
 
     void init(unsigned int width, unsigned int height) override;
 
@@ -48,11 +48,6 @@ private:
         double yPosition;
     };
 
-    GLuint mGlProgram;
-    GLuint mVertexShader;
-    GLuint mVertexLightingSourceShader;
-    GLuint mFragmentShader;
-
 
     bool mMouseButtonPressed=false;
     MousePosition mMouseCursorPosition;
@@ -61,19 +56,7 @@ private:
 
     std::chrono::system_clock::time_point mTime;
 
-    void createOpenGLProgram();
-
-    void openGLCommonSettings() const;
-
-    void clearWindow() const;
-
-    void setUpViewport(const GLFWwindow *window) const;
-
     float timeDiff() const;
-
-    glm::mat4 rightCubeModel() const;
-
-    glm::mat4 leftCubeModel();
 
     StepperInterploator mStepper;
     bool mMoveForward=false;
@@ -84,19 +67,13 @@ private:
     bool mMoveLeft=false;
     bool mMoveRight=false;
 
-    CubeModel mCube;
-    LandModel mLand;
-    SphereModel mSphere;
-
-    glm::mat4 landModel() const;
-
     glm::vec3 currentPosition();
 
-    glm::mat4 sphereModel();
-    PointLight mLightSource;
     HDRFramebuffer mHDRFramebuffer;
     HDRProgram mHDRProgram;
     QuadModel mQuadModel;
+
+    ObjectsRenderingProgram mObjectsProgram;
 };
 
 

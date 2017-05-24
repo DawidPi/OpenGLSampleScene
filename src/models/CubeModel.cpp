@@ -14,7 +14,6 @@ void CubeModel::init() {
     glBindVertexArray(mVao);
 
     glGenBuffers(1, &mCubeBuffer);
-    glGenBuffers(1, &mCubeIndexBuffer);
     glGenBuffers(1, &mCubeColorBuffer);
     glGenBuffers(1, &mCubeNormalsBuffer);
 

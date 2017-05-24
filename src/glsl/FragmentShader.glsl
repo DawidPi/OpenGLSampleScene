@@ -17,6 +17,7 @@ uniform sampler2D fs_texture;
 
 out vec4 fs_color;
 
+
 void main(void)
 {
     vec4 chosenColor;
@@ -27,7 +28,7 @@ void main(void)
         chosenColor = fragmentColor;
     }
 
-    float colorAmbientScale = 0.2;
+    float colorAmbientScale = 0.001;
     vec3 ambientColor = vec3(colorAmbientScale, colorAmbientScale, colorAmbientScale) * chosenColor.rgb;
 
     if(isLightSource){
@@ -44,8 +45,8 @@ void main(void)
         float reflectFactor = dot(eyeDirection, reflection);
         reflectFactor = max(0.0, reflectFactor);
 
-        float lightPower = 30000;
-        vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight,2);
+        float lightPower = 6000;
+        vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight, 2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
         vec3 specularColor = commonColor * pow(reflectFactor,50) * 50*lightPower/(pow(distance(cameraPosition, worldPosition),2));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);

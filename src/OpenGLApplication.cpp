@@ -16,82 +16,22 @@
 #include "glErrorCheck.hpp"
 
 void OpenGLApplication::init(unsigned int width, unsigned int height) {
-    createOpenGLProgram();
-    openGLCommonSettings();
-    mCube.init();
-    mSphere.init(mGlProgram);
-    mLightSource.init();
-
+    mObjectsProgram.init();
     mQuadModel.init();
     mHDRFramebuffer.init(width, height);
     mHDRProgram.init(mHDRFramebuffer);
-    mLand.init(mGlProgram);
 
     mTime = std::chrono::system_clock::now();
 }
 
-void OpenGLApplication::openGLCommonSettings() const {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-}
-
-void OpenGLApplication::createOpenGLProgram() {
-    mGlProgram = glCreateProgram();
-    mVertexShader = ShaderNecromanter().spawnShader(GL_VERTEX_SHADER, "glsl/VertexShader.glsl");
-    mFragmentShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentShader.glsl");
-    glAttachShader(mGlProgram, mVertexShader);
-    glAttachShader(mGlProgram, mFragmentShader);
-    glLinkProgram(mGlProgram);
-    glUseProgram(mGlProgram);
-
-    int isLinked = 0;
-    glGetProgramiv(mGlProgram, GL_LINK_STATUS, (int *)&isLinked);
-    if(isLinked == GL_FALSE)
-        throw std::runtime_error("OpenGL could not link");
-}
-
 void OpenGLApplication::render(GLFWwindow *window) {
-    clearWindow();
-    setUpViewport(window);
-
     processButtons();
-
-    glUseProgram(mGlProgram);
-
-    int width = 0;
-    int height = 0;
-    glfwGetWindowSize(window, &width, &height);
-    mHDRFramebuffer.attachFramebuffer();
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer now
-    glEnable(GL_DEPTH_TEST);
-    glm::vec3 position = currentPosition();
-    Camera camera(position, static_cast<float>(getWidth())/getHeight(), mRotationX, mRotationY);
-    camera.placeCamera(mGlProgram);
-
-    glm::mat4 lightModel(1.0f);
-    lightModel = glm::rotate(lightModel, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    lightModel = glm::rotate(lightModel, 0.5f*timeDiff(), glm::vec3(1.0f, 0.0f, 0.0f));
-    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 0.0f, 200.0f));
-
-    mLightSource.placeLight(mGlProgram, glm::vec4(lightModel[3]));
-
-    mCube.draw(mGlProgram, rightCubeModel());
-    mCube.draw(mGlProgram, leftCubeModel());
-    mLand.draw(mGlProgram, landModel());
-    mSphere.draw(mGlProgram, sphereModel());
-    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-    mLightSource.draw(mGlProgram);
-
-    mHDRFramebuffer.detachFramebuffer();
+    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX,
+    mRotationY, timeDiff());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    mHDRProgram.launch(width, height);
+    mHDRProgram.launch(getWidth(), getHeight());
 
 }
 
@@ -102,53 +42,11 @@ glm::vec3 OpenGLApplication::currentPosition() {
     return position;
 }
 
-glm::mat4 OpenGLApplication::landModel() const {
-    auto landModel = glm::mat4(1.0f);
-    landModel = glm::scale(landModel, glm::vec3(10.0f, 10.0f, 10.0f));
-    landModel = glm::translate(landModel, glm::vec3(0.0f, -1.0f, 0.0f));
-    return landModel;
-}
-
-glm::mat4 OpenGLApplication::leftCubeModel() {
-    auto model = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 5.0f, 25.0f));
-    model  = glm::rotate(model, -timeDiff(), glm::vec3(0.0f, 1.0f, 0.0f));
-    return model;
-}
-
-
-glm::mat4 OpenGLApplication::rightCubeModel() const {
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(5.0f, 5.0f, 25.0f));
-    model = glm::rotate(model, timeDiff(), glm::vec3(0.0f, 1.0f, 0.0f));
-    return model;
-}
-
-glm::mat4 OpenGLApplication::sphereModel() {
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 25.0f));
-    model = glm::rotate(model, timeDiff(), glm::vec3(0.0f,1.0f,0.0f));
-    model = glm::translate(model, glm::vec3(0.0f, 10.0f, 10.0f));
-    return model;
-}
 
 float OpenGLApplication::timeDiff() const {
     auto timeDiff = std::chrono::_V2::system_clock::now() - mTime;
     auto timeDiffFloat = std::chrono::duration_cast<std::chrono::milliseconds>(timeDiff).count() / 1000.0f;
     return timeDiffFloat;
-}
-
-void OpenGLApplication::setUpViewport(const GLFWwindow *window) const {
-    int width = 0;
-    int height = 0;
-    glfwGetWindowSize(window, &width, &height);
-    glViewport(0,0,width, height);
-}
-
-void OpenGLApplication::clearWindow() const {
-    glClear(GL_COLOR_BUFFER_BIT);
-    const GLfloat depthClear= 1.0f;
-    glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void OpenGLApplication::processButtons() {

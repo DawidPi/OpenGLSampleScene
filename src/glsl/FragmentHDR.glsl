@@ -9,8 +9,9 @@ void main() {
     const float gamma = 2.2;
 
     vec3 hdrColor = texture(hdrTexture, texCoords).rgb;
-    vec3 reinhardMapping = hdrColor/(hdrColor+vec3(1.0));
-    reinhardMapping = pow(reinhardMapping, vec3(1.0/gamma));
+    float exposure = 7.0;
+    vec3 exposureMapping = vec3(1.0) - exp(-hdrColor * exposure);
+    exposureMapping = pow(exposureMapping, vec3(1.0/gamma));
 
-    fs_color = vec4(reinhardMapping, 1.0);
+    fs_color = vec4(exposureMapping, 1.0);
 }
