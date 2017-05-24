@@ -6,10 +6,12 @@ uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 model;
 uniform vec4 lightPosition;
+uniform bool useTexCoords;
 
 layout (location = 1) in vec4 color;
 layout (location = 0) in vec4 position;
 layout (location = 2) in vec4 normal;
+layout (location = 3) in vec2 texCoords;
 
 out vec2 fs_texCoords;
 out vec4 fragmentColor;
@@ -23,6 +25,11 @@ void main() {
     fragmentColor = color;
     normalPosition = model*normal;
     worldPosition = model*position;
-    fs_texCoords = position.xz;
+
+    if(useTexCoords)
+        fs_texCoords = texCoords;
+    else
+        fs_texCoords = position.xz;
+
     vertexDistanceFromLight = distance(position, lightPosition);
 }

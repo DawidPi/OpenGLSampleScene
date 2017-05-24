@@ -7,42 +7,49 @@
 #include <glm/ext.hpp>
 #include <iostream>
 #include "SphereModel.hpp"
+#include "../Texture.hpp"
 
 SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int rows, unsigned int cols) {
-    auto colStep = 2*glm::pi<GLfloat>()/cols;
-    auto rowStep = 2*glm::pi<GLfloat>()/rows;
+    cols+=2;
+    auto colStep = glm::pi<GLfloat>()/(cols);
+    auto rowStep = glm::pi<GLfloat>()/rows;
 
-    const glm::vec4 finalColor(color, 1.0f);
 
-    for(float currentRow =0.0f; currentRow <= 2*glm::pi<GLfloat>(); currentRow += rowStep){
-        for(float currentCol=0.0f; currentCol <= 2*glm::pi<GLfloat>(); currentCol += colStep){
 
-            GLfloat x = radius*sin(currentRow+rowStep)*cos(currentCol);
-            GLfloat y = radius*cos(currentRow+rowStep);
-            GLfloat z = radius*sin(currentRow+rowStep)*sin(currentCol);
 
-            mVertices.push_back(x);
-            mVertices.push_back(y);
-            mVertices.push_back(z);
-            mVertices.push_back(1.0f);
+    for(std::size_t currentRow = 0; currentRow < 2*rows; currentRow++){
+        for(std::size_t currentCol = 0; currentCol < 2*cols+1; currentCol++){
+            float rowValue = currentRow * rowStep;
+            float colValue = currentCol * colStep;
+
+            GLfloat x = radius*sin(rowValue+rowStep)*cos(colValue);
+            GLfloat y = radius*cos(rowValue+rowStep);
+            GLfloat z = radius*sin(rowValue+rowStep)*sin(colValue);
+
+            mVertices.push_back(glm::vec4(x,y,z,1.0f));
             mNormals.push_back(glm::vec4(x,y,z,0.0f));
-            mColors.push_back(finalColor);
 
-            x = radius*sin(currentRow)*cos(currentCol);
-            y = radius*cos(currentRow);
-            z = radius*sin(currentRow)*sin(currentCol);
+            x = radius*sin(rowValue)*cos(colValue);
+            y = radius*cos(rowValue);
+            z = radius*sin(rowValue)*sin(colValue);
 
-            mVertices.push_back(x);
-            mVertices.push_back(y);
-            mVertices.push_back(z);
-            mVertices.push_back(1.0f);
+            mVertices.push_back(glm::vec4(x,y,z,1.0f));
             mNormals.push_back(glm::vec4(x,y,z,0.0f));
-            mColors.push_back(finalColor);
+
+            auto nextTexCoordValueRow = (rowValue + rowStep) / (glm::pi<GLfloat>());
+            auto texCoordValueRow = (rowValue) / (glm::pi<GLfloat>());
+            auto texCoordValueCol = colValue / (glm::pi<GLfloat>());
+
+
+            mTexCoords.push_back(glm::vec2(nextTexCoordValueRow, texCoordValueCol));
+            mTexCoords.push_back(glm::vec2(texCoordValueRow, texCoordValueCol));
         }
+
     }
+
 }
 
-void SphereModel::init() {
+void SphereModel::init(GLuint mGLProgram) {
     glGenVertexArrays(1, &mVao);
 
     glBindVertexArray(mVao);
@@ -50,27 +57,31 @@ void SphereModel::init() {
     glGenBuffers(1, &mSphereBuffer);
     glGenBuffers(1, &mSphereColorBuffer);
     glGenBuffers(1, &mSphereNormalsBuffer);
+    glGenBuffers(1, &mTexCoordsBuffer);
 
     glBindBuffer(GL_ARRAY_BUFFER, mSphereBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices().size() * sizeof(GLfloat), vertices().data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices().size() * sizeof(glm::vec4), vertices().data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0,4, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-    glBindBuffer(GL_ARRAY_BUFFER, mSphereColorBuffer);
-    glBufferData(GL_ARRAY_BUFFER, colors().size() * sizeof(glm::vec4), colors().data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(1,4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     glBindBuffer(GL_ARRAY_BUFFER, mSphereNormalsBuffer);
     glBufferData(GL_ARRAY_BUFFER, normals().size() * sizeof(glm::vec4), normals().data(), GL_STATIC_DRAW);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
+    glBindBuffer(GL_ARRAY_BUFFER, mTexCoordsBuffer);
+    glBufferData(GL_ARRAY_BUFFER,
+                 mTexCoords.size() * sizeof(decltype(mTexCoords)::value_type), mTexCoords.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    mTexture.load("textures/SunTexture.png", mGLProgram);
+
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
 
     glBindVertexArray(0);
 }
 
-std::vector<GLfloat> &SphereModel::vertices() {
+std::vector<glm::vec4> &SphereModel::vertices() {
     return mVertices;
 }
 
@@ -85,10 +96,26 @@ std::vector<glm::vec4> &SphereModel::normals() {
 void SphereModel::draw(GLuint program, const glm::mat4 &model) {
     glBindVertexArray(mVao);
 
-    auto uniformLocation = glGetUniformLocation(program, "model");
+    auto uniformLocation = glGetUniformLocation(program, "useTexture");
+    glUniform1i(uniformLocation, GL_TRUE);
+
+    uniformLocation = glGetUniformLocation(program, "useTexCoords");
+    glUniform1i(uniformLocation, GL_TRUE);
+
+    mTexture.attach();
+
+    uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
+    glPointSize(5.0f);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei) (vertices().size()));
 
+    uniformLocation = glGetUniformLocation(program, "useTexture");
+    glUniform1i(uniformLocation, GL_FALSE);
+
+    uniformLocation = glGetUniformLocation(program, "useTexCoords");
+    glUniform1i(uniformLocation, GL_FALSE);
+
+    mTexture.detach();
     glBindVertexArray(0);
 }

@@ -9,11 +9,12 @@
 #include <glad/glad.h>
 #include <vector>
 #include <glm/matrix.hpp>
+#include "../Texture.hpp"
 
 class LandModel {
 public:
 
-    void init();
+    void init(GLuint i);
     void draw(GLuint program, const glm::mat4 &model);
 
 private:
@@ -44,6 +45,7 @@ private:
     static const std::vector<GLfloat> colorBuffer;
     static const std::vector<GLuint> indicesBuffer;
     static const std::vector<GLfloat> normalsBuffer;
+    Texture mTextureReader;
 };
 
 

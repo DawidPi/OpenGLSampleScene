@@ -13,6 +13,7 @@
 #include <CubeModel.hpp>
 #include <LandModel.hpp>
 #include <SphereModel.hpp>
+#include <QuadModel.hpp>
 #include "OpenGLWindow.hpp"
 #include "StepperInterploator.hpp"
 #include "light/PointLight.hpp"
@@ -24,10 +25,10 @@ public:
     OpenGLApplication() :
             mMouseCursorPosition(0,0),
             mStepper(std::chrono::milliseconds(20)),
-            mSphere(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 40, 40),
+            mSphere(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 50, 50),
             mLightSource(){}
 
-    void init() override;
+    void init(unsigned int width, unsigned int height) override;
 
     void render(GLFWwindow *window) override;
 
@@ -95,6 +96,7 @@ private:
     PointLight mLightSource;
     HDRFramebuffer mHDRFramebuffer;
     HDRProgram mHDRProgram;
+    QuadModel mQuadModel;
 };
 
 

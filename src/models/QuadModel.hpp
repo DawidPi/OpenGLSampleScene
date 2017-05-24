@@ -17,6 +17,7 @@ public:
     GLuint mBuffer;
     GLuint mVao;
     std::size_t mBufferIndices;
+    GLuint mTexCoordBuffer;
 };
 
 

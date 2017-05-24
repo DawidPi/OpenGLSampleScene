@@ -45,7 +45,7 @@ void OpenGLWindow::startWindow(const char *windowName) {
     glfwSetScrollCallback(window, onScrollDone);
     glfwSetMouseButtonCallback(window, onMouseButtonPressed);
     glfwSetCursorPosCallback(window, onMouseCursorChanged);
-    init();
+    init(mWindowWidth, mWindowHeight);
     while (!glfwWindowShouldClose(window)) {
         if(mShutDown){
             glfwDestroyWindow(window);

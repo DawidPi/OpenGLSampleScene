@@ -13,7 +13,7 @@ public:
     OpenGLWindow(const OpenGLWindow& rhs)= delete;
     OpenGLWindow& operator=(const OpenGLWindow& rhs)= delete;
 
-    virtual void init()=0;
+    virtual void init(unsigned int width, unsigned int height)=0;
     virtual void render(GLFWwindow *window)=0;
     virtual void startWindow(const char *windowName);
 

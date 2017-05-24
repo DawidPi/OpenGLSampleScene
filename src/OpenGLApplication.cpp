@@ -15,15 +15,17 @@
 #include "light/PointLight.hpp"
 #include "glErrorCheck.hpp"
 
-void OpenGLApplication::init() {
+void OpenGLApplication::init(unsigned int width, unsigned int height) {
     createOpenGLProgram();
     openGLCommonSettings();
     mCube.init();
-    mLand.init();
-    processGLError();
-    mSphere.init();
+    mSphere.init(mGlProgram);
     mLightSource.init();
+
+    mQuadModel.init();
+    mHDRFramebuffer.init(width, height);
     mHDRProgram.init(mHDRFramebuffer);
+    mLand.init(mGlProgram);
 
     mTime = std::chrono::system_clock::now();
 }
@@ -63,9 +65,10 @@ void OpenGLApplication::render(GLFWwindow *window) {
     int width = 0;
     int height = 0;
     glfwGetWindowSize(window, &width, &height);
-    mHDRFramebuffer.init(width, height);
     mHDRFramebuffer.attachFramebuffer();
-
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer now
+    glEnable(GL_DEPTH_TEST);
     glm::vec3 position = currentPosition();
     Camera camera(position, static_cast<float>(getWidth())/getHeight(), mRotationX, mRotationY);
     camera.placeCamera(mGlProgram);
@@ -83,6 +86,10 @@ void OpenGLApplication::render(GLFWwindow *window) {
     mSphere.draw(mGlProgram, sphereModel());
     mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
     mLightSource.draw(mGlProgram);
+
+    mHDRFramebuffer.detachFramebuffer();
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     mHDRProgram.launch(width, height);
 
@@ -141,7 +148,7 @@ void OpenGLApplication::clearWindow() const {
     glClear(GL_COLOR_BUFFER_BIT);
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 5.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void OpenGLApplication::processButtons() {

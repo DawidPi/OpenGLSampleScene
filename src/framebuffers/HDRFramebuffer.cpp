@@ -14,36 +14,40 @@ void HDRFramebuffer::init(unsigned int width, unsigned int height) {
     glGenFramebuffers(1, &mFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 
+    glActiveTexture(GL_TEXTURE1);
     glGenTextures(1, &mTextureId);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA16F, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0,  GL_RGBA, GL_FLOAT, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenRenderbuffers(1, &mDepthBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mDepthBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, mDepthBuffer);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D ,mTextureId, 0);
 
-    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-    glDrawBuffers(1, DrawBuffers);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE);
+    processGLFramebufferStatus();
 }
 
 void HDRFramebuffer::attachFramebuffer() const {
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 }
 
+void HDRFramebuffer::detachFramebuffer() const {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void HDRFramebuffer::attachTexture() const {
     glBindTexture(GL_TEXTURE_2D, mTextureId);
+}
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+HDRFramebuffer::~HDRFramebuffer() {
+    glDeleteFramebuffers(GL_FRAMEBUFFER, &mFramebuffer);
 }

@@ -7,10 +7,10 @@
 #include "PointLight.hpp"
 
 PointLight::PointLight() :
-        mLightBulb(glm::vec3(1.0f, 1.0f, 0.0f), 10.0f, 100, 100) {}
+        mLightBulb(glm::vec3(1.0f, 1.0f, 0.0f), 10.0f, 360, 360) {}
 
 void PointLight::init() {
-    mLightBulb.init();
+    mLightBulb.init(0);
 }
 
 void PointLight::placeLight(GLuint program, const glm::vec4 &lightPosition) {

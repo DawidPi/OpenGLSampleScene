@@ -44,10 +44,10 @@ void main(void)
         float reflectFactor = dot(eyeDirection, reflection);
         reflectFactor = max(0.0, reflectFactor);
 
-        float lightPower = 300000;
+        float lightPower = 30000;
         vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight,2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
-        vec3 specularColor = commonColor * pow(reflectFactor, 199) * lightPower*0.3/(1*distance(cameraPosition, worldPosition));
+        vec3 specularColor = commonColor * pow(reflectFactor,50) * 50*lightPower/(pow(distance(cameraPosition, worldPosition),2));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);
     }
 }

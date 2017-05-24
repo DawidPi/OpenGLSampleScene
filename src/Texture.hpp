@@ -7,10 +7,19 @@
 
 #include <string>
 #include <stb_image.h>
+#include <glad/glad.h>
 
 class Texture {
 public:
-    unsigned int load(const std::string& path);
+    unsigned int load(std::string path, GLuint i);
+    void attach();
+    void detach();
+
+    ~Texture();
+private:
+    GLuint mTextureId;
+    GLuint mGlProgram;
+    stbi_uc *mData;
 };
 
 

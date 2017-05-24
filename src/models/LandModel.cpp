@@ -5,6 +5,7 @@
 #include <glm/ext.hpp>
 #include "LandModel.hpp"
 #include "../Texture.hpp"
+#include "../glErrorCheck.hpp"
 
 const std::vector<GLfloat> LandModel::vertexBuffer{
         -10.0f, 0.0f, -10.0f, 1.0f,
@@ -35,7 +36,7 @@ const std::vector<GLfloat> LandModel::normalsBuffer{
         0.0f, 1.0f, 0.0f, 0.0f,
 };
 
-void LandModel::init() {
+void LandModel::init(GLuint glProgram) {
     glGenVertexArrays(1, &mVao);
     glBindVertexArray(mVao);
 
@@ -59,8 +60,7 @@ void LandModel::init() {
     glBufferData(GL_ARRAY_BUFFER, normals().size() * sizeof(GLfloat), normals().data(), GL_STATIC_DRAW);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    Texture textureReader;
-    auto textureId = textureReader.load("textures/groundSeamlessTexture.png");
+    mTextureReader.load("textures/groundSeamlessTexture.png", glProgram);
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -72,8 +72,12 @@ void LandModel::init() {
 void LandModel::draw(GLuint program, const glm::mat4 &model) {
     glBindVertexArray(mVao);
 
+    glActiveTexture(GL_TEXTURE1);
+
     auto uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
+
+    mTextureReader.attach();
 
     uniformLocation = glGetUniformLocation(program, "useTexture");
     glUniform1i(uniformLocation, GL_TRUE);
@@ -83,4 +87,6 @@ void LandModel::draw(GLuint program, const glm::mat4 &model) {
 
     uniformLocation = glGetUniformLocation(program, "useTexture");
     glUniform1i(uniformLocation, GL_FALSE);
+
+    mTextureReader.detach();
 }

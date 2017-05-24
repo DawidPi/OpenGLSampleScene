@@ -11,7 +11,10 @@ class HDRFramebuffer {
 public:
     void init(unsigned int width, unsigned int height);
     void attachFramebuffer() const ;
+    void detachFramebuffer() const ;
     void attachTexture() const ;
+
+    ~HDRFramebuffer();
 private:
     GLuint mTextureId;
     GLuint mFramebuffer;

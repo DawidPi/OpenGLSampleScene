@@ -1,5 +1,5 @@
 //
-// Created by dapl on 2017-05-23.
+// Created by dawid on 23.05.17.
 //
 
 #include <stdexcept>
@@ -8,7 +8,6 @@
 
 void HDRProgram::init(const HDRFramebuffer &framebuffer) {
     createProgramContext();
-    defaultOpenGLSettings();
     mFramebuffer = &framebuffer;
     mModel.init();
 }
@@ -18,6 +17,8 @@ void HDRProgram::defaultOpenGLSettings() const {
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 }
 
 void HDRProgram::createProgramContext() {
@@ -27,23 +28,23 @@ void HDRProgram::createProgramContext() {
     glAttachShader(mGlProgram, mVertexShader);
     glAttachShader(mGlProgram, mFragmentShader);
     glLinkProgram(mGlProgram);
-    glUseProgram(mGlProgram);
 
     int isLinked = 0;
-    glGetProgramiv(mGlProgram, GL_LINK_STATUS, (int *)&isLinked);
+    glGetProgramiv(mGlProgram, GL_LINK_STATUS, &isLinked);
     if(isLinked == GL_FALSE)
         throw std::runtime_error("OpenGL could not link");
 }
 
 void HDRProgram::launch(unsigned int screenWidth, unsigned int screenHeight) {
+    defaultOpenGLSettings();
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    const GLfloat depthClear= 1.0f;
+//    glClearBufferfv(GL_DEPTH, 0, &depthClear);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+//
+//    glViewport(0,0, screenWidth, screenHeight);
     glUseProgram(mGlProgram);
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    const GLfloat depthClear= 1.0f;
-    glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 5.0f, 0.0f);
-
-    glViewport(0,0, screenWidth, screenHeight);
+//    glClear(GL_COLOR_BUFFER_BIT);
 
     mFramebuffer->attachTexture();
     mModel.draw(mGlProgram);

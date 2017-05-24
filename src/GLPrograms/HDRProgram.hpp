@@ -1,5 +1,5 @@
 //
-// Created by dapl on 2017-05-23.
+// Created by dawid on 23.05.17.
 //
 
 #ifndef PROJECT_HDRPROGRAM_HPP

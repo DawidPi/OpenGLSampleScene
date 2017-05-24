@@ -9,23 +9,23 @@
 #include <glm/vec3.hpp>
 #include <glm/matrix.hpp>
 #include <vector>
+#include "../Texture.hpp"
 
 class SphereModel {
 public:
     SphereModel(const glm::vec3& color, double radius, unsigned int rows, unsigned int cols);
-    void init();
+    void init(GLuint i);
     void draw(GLuint program, const glm::mat4 &model);
 
 private:
-    std::vector<GLfloat> mVertices;
+    std::vector<glm::vec4> mVertices;
 
     GLuint mVao;
     GLuint mSphereBuffer;
-    GLuint mSphereIndexBuffer;
     GLuint mSphereColorBuffer;
     GLuint mSphereNormalsBuffer;
 
-    std::vector<GLfloat> &vertices();
+    std::vector<glm::vec4> &vertices();
     std::vector<glm::vec4> mColors;
 
     std::vector<glm::vec4> &colors();
@@ -33,6 +33,10 @@ private:
     std::vector<glm::vec4> &normals();
 
     std::vector<glm::vec4> mNormals;
+    Texture mTexture;
+    std::vector<glm::vec2> mTexCoords;
+    GLuint mTexCoordsBuffer;
+    std::vector<glm::vec4> mVerticesUp;
 };
 
 

@@ -21,7 +21,7 @@ set(SOURCES
         models/SphereModel.cpp
         models/SphereModel.hpp
         Texture.cpp
-        Texture.hpp framebuffers/HDRFramebuffer.cpp framebuffers/HDRFramebuffer.hpp GLPrograms/HDRProgram.cpp GLPrograms/HDRProgram.hpp models/QuadModel.cpp models/QuadModel.hpp glErrorCheck.hpp)
+        Texture.hpp framebuffers/HDRFramebuffer.cpp framebuffers/HDRFramebuffer.hpp models/QuadModel.cpp models/QuadModel.hpp glErrorCheck.hpp GLPrograms/HDRProgram.cpp GLPrograms/HDRProgram.hpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 
