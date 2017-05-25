@@ -13,12 +13,13 @@
 class PointLight {
 public:
     PointLight();
-    void init();
+    void init(GLuint program);
     void placeLight(GLuint program, const glm::vec4 &lightPosition);
     void draw(GLuint program);
 
 private:
     SphereModel mLightBulb;
+    Texture mSunTexture;
     glm::vec4 mLightPosition;
 };
 

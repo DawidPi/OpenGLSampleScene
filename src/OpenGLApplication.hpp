@@ -21,6 +21,7 @@
 #include "framebuffers/HDRFramebuffer.hpp"
 #include "GLPrograms/HDRProgram.hpp"
 #include "GLPrograms/ObjectsRenderingProgram.hpp"
+#include "GLPrograms/SkyBoxProgram.hpp"
 
 class OpenGLApplication : public OpenGLWindow {
 public:
@@ -74,6 +75,7 @@ private:
     QuadModel mQuadModel;
 
     ObjectsRenderingProgram mObjectsProgram;
+    SkyBoxProgram mSkyBoxProgram;
 };
 
 

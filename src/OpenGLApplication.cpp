@@ -17,6 +17,7 @@
 
 void OpenGLApplication::init(unsigned int width, unsigned int height) {
     mObjectsProgram.init();
+    mSkyBoxProgram.init();
     mQuadModel.init();
     mHDRFramebuffer.init(width, height);
     mHDRProgram.init(mHDRFramebuffer);
@@ -26,13 +27,11 @@ void OpenGLApplication::init(unsigned int width, unsigned int height) {
 
 void OpenGLApplication::render(GLFWwindow *window) {
     processButtons();
-    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX,
-    mRotationY, timeDiff());
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer);
+    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff());
 
-    mHDRProgram.launch(getWidth(), getHeight());
 
+    mHDRProgram.start(getWidth(), getHeight());
 }
 
 glm::vec3 OpenGLApplication::currentPosition() {

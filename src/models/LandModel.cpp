@@ -4,7 +4,6 @@
 
 #include <glm/ext.hpp>
 #include "LandModel.hpp"
-#include "../Texture.hpp"
 #include "../glErrorCheck.hpp"
 
 const std::vector<GLfloat> LandModel::vertexBuffer{
@@ -13,13 +12,6 @@ const std::vector<GLfloat> LandModel::vertexBuffer{
         10.0f, 0.0f, -10.0f, 1.0f,
         10.0f, 0.0f, 10.0f, 1.0f,
         0.0f, 0.0f, 0.0f, 1.0f
-};
-const std::vector<GLfloat> LandModel::colorBuffer{
-        95.0f/255, 27.0f/255, 3.0f/255, 0,
-        95.0f/255, 27.0f/255, 3.0f/255, 0,
-        95.0f/255, 27.0f/255, 3.0f/255, 0,
-        95.0f/255, 27.0f/255, 3.0f/255, 0,
-        95.0f/255, 27.0f/255, 3.0f/255, 0
 };
 const std::vector<GLuint> LandModel::indicesBuffer{
         1,4,0,
@@ -42,7 +34,6 @@ void LandModel::init(GLuint glProgram) {
 
     glGenBuffers(1, &mLandBuffer);
     glGenBuffers(1, &mLandIndices);
-    glGenBuffers(1, &mLandColors);
     glGenBuffers(1, &mLandNormals);
 
     glBindBuffer(GL_ARRAY_BUFFER, mLandBuffer);
@@ -52,10 +43,6 @@ void LandModel::init(GLuint glProgram) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mLandIndices);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices().size() * sizeof(GLuint), indices().data(), GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, mLandColors);
-    glBufferData(GL_ARRAY_BUFFER, colors().size() * sizeof(GLfloat), colors().data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-
     glBindBuffer(GL_ARRAY_BUFFER, mLandNormals);
     glBufferData(GL_ARRAY_BUFFER, normals().size() * sizeof(GLfloat), normals().data(), GL_STATIC_DRAW);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -63,7 +50,6 @@ void LandModel::init(GLuint glProgram) {
     mTextureReader.load("textures/groundSeamlessTexture.png", glProgram);
 
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
@@ -79,14 +65,8 @@ void LandModel::draw(GLuint program, const glm::mat4 &model) {
 
     mTextureReader.attach();
 
-    uniformLocation = glGetUniformLocation(program, "useTexture");
-    glUniform1i(uniformLocation, GL_TRUE);
-
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices().size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-
-    uniformLocation = glGetUniformLocation(program, "useTexture");
-    glUniform1i(uniformLocation, GL_FALSE);
 
     mTextureReader.detach();
 }

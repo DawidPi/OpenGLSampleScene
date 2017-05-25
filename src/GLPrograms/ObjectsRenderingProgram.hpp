@@ -15,7 +15,7 @@
 
 class ObjectsRenderingProgram {
 public:
-    ObjectsRenderingProgram():mSphere(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 50, 50){}
+    ObjectsRenderingProgram(): mSphere(1.0f, 50, 50) {}
     void init();
     void draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
                   float rotationX, float rotationY, float timeDiff);
@@ -44,6 +44,9 @@ private:
     glm::mat4 landModel();
 
     glm::mat4 sphereModel(float timeDiff);
+
+    Texture metalTexture;
+    Texture jeansTexture;
 };
 
 

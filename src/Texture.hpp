@@ -11,7 +11,7 @@
 
 class Texture {
 public:
-    unsigned int load(std::string path, GLuint i);
+    unsigned int load(std::string path, GLuint glProgram);
     void attach();
     void detach();
 

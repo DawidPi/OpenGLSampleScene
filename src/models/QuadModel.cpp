@@ -49,9 +49,9 @@ void QuadModel::init() {
     glBindVertexArray(0);
 }
 
-void QuadModel::draw(GLuint program) {
+void QuadModel::draw() {
     glBindVertexArray(mVao);
+
     glDrawArrays(GL_TRIANGLES, 0, mBufferIndices);
     glBindVertexArray(0);
-
 }

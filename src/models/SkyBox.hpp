@@ -5,11 +5,14 @@
 #ifndef PROJECT_SKYBOX_HPP
 #define PROJECT_SKYBOX_HPP
 
+#include <glad/glad.h>
+#include <vector>
+#include <glm/vec3.hpp>
 
 class SkyBox {
 public:
     void init(GLuint program);
-    void draw();
+    void draw(glm::vec3 cameraPosition);
 
 private:
     const std::vector<GLfloat>& vertices();

@@ -12,7 +12,7 @@
 class QuadModel {
 public:
     void init();
-    void draw(GLuint program);
+    void draw();
 
     GLuint mBuffer;
     GLuint mVao;

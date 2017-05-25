@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 
 Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY) {
+
     auto rotationXMatrix = glm::rotate(glm::mat4(1.0f), -rotationX ,glm::vec3(1.0f, 0.0f, 0.0f));
     mProj = glm::perspective(glm::radians(45.0f), screenRatio, 1.0f, 1000.0f )
                 * rotationXMatrix;
@@ -23,15 +24,28 @@ Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotatio
 }
 
 void Camera::placeCamera(GLuint program) {
+    setView(program);
+    setProjection(program);
+    setCameraPosition(program);
+    setLookDirection(program);
+}
+
+void Camera::setLookDirection(GLuint program) const {
+    auto uniformLocation = glGetUniformLocation(program, "lookDirection");
+    glUniform4fv(uniformLocation, 1, value_ptr(mLookDirection));
+}
+
+void Camera::setCameraPosition(GLuint program) const {
+    auto uniformLocation = glGetUniformLocation(program, "cameraPosition");
+    glUniform4fv(uniformLocation, 1, value_ptr(mCameraPos));
+}
+
+void Camera::setProjection(GLuint program) const {
+    auto uniformLocation = glGetUniformLocation(program, "proj");
+    glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(mProj));
+}
+
+void Camera::setView(GLuint program) const {
     auto uniformLocation = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(mView));
-
-    uniformLocation = glGetUniformLocation(program, "proj");
-    glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(mProj));
-
-    uniformLocation = glGetUniformLocation(program, "cameraPosition");
-    glUniform4fv(uniformLocation, 1, glm::value_ptr(mCameraPos));
-
-    uniformLocation = glGetUniformLocation(program, "lookDirection");
-    glUniform4fv(uniformLocation, 1, glm::value_ptr(mLookDirection));
 }

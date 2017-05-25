@@ -52,7 +52,7 @@ static inline GLenum processGLFramebufferStatus(){
         CASE(GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS)
 
         default:
-        std::cerr << "No recognized error" << std::endl;
+        std::cerr << "No framebuffer error found" << std::endl;
     }
 
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);

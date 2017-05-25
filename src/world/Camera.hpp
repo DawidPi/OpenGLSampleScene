@@ -6,13 +6,22 @@
 #define PROJECT_CAMERA_HPP
 
 
-#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/matrix.hpp>
 #include <glad/glad.h>
 
 class Camera {
 public:
     Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY);
     void placeCamera(GLuint program);
+
+    void setView(GLuint program) const;
+
+    void setProjection(GLuint program) const;
+
+    void setCameraPosition(GLuint program) const;
+
+    void setLookDirection(GLuint program) const;
 
 private:
     glm::mat4 mProj;

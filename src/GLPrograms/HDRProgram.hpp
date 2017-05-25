@@ -12,7 +12,7 @@
 class HDRProgram {
 public:
     void init(const HDRFramebuffer &framebuffer);
-    void launch(unsigned int screenWidth, unsigned int screenHeight);
+    void start(unsigned int screenWidth, unsigned int screenHeight);
 
 private:
     GLuint mGlProgram;

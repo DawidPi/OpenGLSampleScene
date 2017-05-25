@@ -22,10 +22,6 @@ private:
         return vertexBuffer;
     }
 
-    const std::vector<GLfloat>& colors(){
-        return colorBuffer;
-    }
-
     const std::vector<GLuint>& indices(){
         return indicesBuffer;
     }
@@ -38,11 +34,9 @@ private:
     GLuint mVao;
     GLuint mLandBuffer;
     GLuint mLandIndices;
-    GLuint mLandColors;
     GLuint mLandNormals;
 
     static const std::vector<GLfloat> vertexBuffer;
-    static const std::vector<GLfloat> colorBuffer;
     static const std::vector<GLuint> indicesBuffer;
     static const std::vector<GLfloat> normalsBuffer;
     Texture mTextureReader;

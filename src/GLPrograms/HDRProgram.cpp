@@ -35,17 +35,16 @@ void HDRProgram::createProgramContext() {
         throw std::runtime_error("OpenGL could not link");
 }
 
-void HDRProgram::launch(unsigned int screenWidth, unsigned int screenHeight) {
+void HDRProgram::start(unsigned int screenWidth, unsigned int screenHeight) {
     defaultOpenGLSettings();
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    const GLfloat depthClear= 1.0f;
-//    glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//
-//    glViewport(0,0, screenWidth, screenHeight);
-    glUseProgram(mGlProgram);
-//    glClear(GL_COLOR_BUFFER_BIT);
+    //const GLfloat depthClear= 1.0f;
+    //glClearBufferfv(GL_DEPTH, 0, &depthClear);
+    //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-    mFramebuffer->attachTexture();
-    mModel.draw(mGlProgram);
+    glViewport(0,0, screenWidth, screenHeight);
+    glUseProgram(mGlProgram);
+    //glClear(GL_COLOR_BUFFER_BIT);
+
+    mFramebuffer->attachTexture(mGlProgram);
+    mModel.draw();
 }

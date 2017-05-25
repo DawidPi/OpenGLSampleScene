@@ -8,25 +8,18 @@
 
 #include <glad/glad.h>
 #include <vector>
+#include "../Texture.hpp"
 
 class CubeModel {
 public:
     CubeModel();
 
     void init();
-    void draw(GLuint program, const glm::mat4 &model);
+    void draw(GLuint program, const glm::mat4 &model, Texture &texture);
 private:
     const std::vector<GLfloat>& vertices(){
         return vertexBufferPrim;
     }
-
-    const std::vector<GLfloat>& colors(){
-        return colorBuffer;
-    }
-
-//    const std::vector<GLuint>& indices(){
-//        return indicesBuffer;
-//    }
 
     const std::vector<GLfloat>& normals(){
         return normalsBuffer;
@@ -38,11 +31,15 @@ private:
     GLuint mCubeIndexBuffer;
     GLuint mCubeColorBuffer;
     GLuint mCubeNormalsBuffer;
+    GLuint mTexCoordsBuffer;
 
     static const std::vector<GLfloat> vertexBufferPrim;
     static const std::vector<GLfloat> colorBuffer;
     static const std::vector<GLfloat> normalsBuffer;
-//    static const std::vector<GLuint > indicesBuffer;
+    static const std::vector<GLfloat> mTexCoords;
+
+    Texture* mTexture;
+
 };
 
 

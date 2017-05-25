@@ -8,7 +8,6 @@ uniform mat4 model;
 uniform vec4 lightPosition;
 uniform bool useTexCoords;
 
-layout (location = 1) in vec4 color;
 layout (location = 0) in vec4 position;
 layout (location = 2) in vec4 normal;
 layout (location = 3) in vec2 texCoords;
@@ -22,7 +21,6 @@ out float vertexDistanceFromLight;
 void main() {
     mat4 mvp = proj * view * model;
     gl_Position = mvp * position;
-    fragmentColor = color;
     normalPosition = model*normal;
     worldPosition = model*position;
 

@@ -1,12 +1,10 @@
 #version 400
 
-in vec4 fragmentColor;
 in vec2 fs_texCoords;
 in vec4 normalPosition;
 in vec4 worldPosition;
 in float vertexDistanceFromLight;
 
-uniform bool useTexture;
 uniform bool useLighting;
 uniform bool isLightSource;
 uniform vec4 cameraPosition;
@@ -21,12 +19,8 @@ out vec4 fs_color;
 void main(void)
 {
     vec4 chosenColor;
+    chosenColor = texture(fs_texture, fs_texCoords);
 
-    if(useTexture)
-        chosenColor = texture(fs_texture, fs_texCoords);
-    else{
-        chosenColor = fragmentColor;
-    }
 
     float colorAmbientScale = 0.001;
     vec3 ambientColor = vec3(colorAmbientScale, colorAmbientScale, colorAmbientScale) * chosenColor.rgb;
@@ -45,10 +39,10 @@ void main(void)
         float reflectFactor = dot(eyeDirection, reflection);
         reflectFactor = max(0.0, reflectFactor);
 
-        float lightPower = 6000;
+        float lightPower = 8000;
         vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight, 2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
-        vec3 specularColor = commonColor * pow(reflectFactor,50) * 50*lightPower/(pow(distance(cameraPosition, worldPosition),2));
+        vec3 specularColor = vec3(0);// commonColor * pow(reflectFactor,50) * 25*lightPower/(distance(cameraPosition, worldPosition));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);
     }
 }

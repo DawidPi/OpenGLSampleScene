@@ -7,10 +7,11 @@
 #include "PointLight.hpp"
 
 PointLight::PointLight() :
-        mLightBulb(glm::vec3(1.0f, 1.0f, 0.0f), 10.0f, 360, 360) {}
+        mLightBulb(10.0f, 360, 360) {}
 
-void PointLight::init() {
-    mLightBulb.init(0);
+void PointLight::init(GLuint program) {
+    mSunTexture.load("textures/SunTexture.png", program);
+    mLightBulb.init();
 }
 
 void PointLight::placeLight(GLuint program, const glm::vec4 &lightPosition) {
@@ -35,7 +36,7 @@ void PointLight::draw(GLuint program) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    mLightBulb.draw(program, glm::translate(glm::mat4(1.0f), glm::vec3(mLightPosition)));
+    mLightBulb.draw(program, glm::translate(glm::mat4(1.0f), glm::vec3(mLightPosition)), mSunTexture);
 
     glDisable(GL_BLEND);
 

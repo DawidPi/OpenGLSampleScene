@@ -12,7 +12,7 @@ public:
     void init(unsigned int width, unsigned int height);
     void attachFramebuffer() const ;
     void detachFramebuffer() const ;
-    void attachTexture() const ;
+    void attachTexture(GLuint program) const ;
 
     ~HDRFramebuffer();
 private:

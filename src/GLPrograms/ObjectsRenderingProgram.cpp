@@ -10,14 +10,17 @@
 #include "../ShaderNecromanter.hpp"
 #include "../framebuffers/HDRFramebuffer.hpp"
 #include "../world/Camera.hpp"
+#include "../glErrorCheck.hpp"
 
 void ObjectsRenderingProgram::init() {
     createOpenGLProgram();
     openGLCommonSettings();
     mCube.init();
-    mSphere.init(mGlProgram);
-    mLightSource.init();
+    mSphere.init();
+    mLightSource.init(mGlProgram);
     mLand.init(mGlProgram);
+    metalTexture.load("textures/MetalCubeTexture.jpg", mGlProgram);
+    jeansTexture.load("textures/jeansTexture.jpg", mGlProgram);
 }
 
 void ObjectsRenderingProgram::createOpenGLProgram() {
@@ -48,7 +51,6 @@ void ObjectsRenderingProgram::clearWindow() const {
     glClear(GL_COLOR_BUFFER_BIT);
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
@@ -64,25 +66,29 @@ void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow
 
     framebuffer.attachFramebuffer();
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer now
     glEnable(GL_DEPTH_TEST);
 
+    if(width==0){
+        width=1;
+        height=1;
+    }
     Camera camera(position, static_cast<float>(width)/height, rotationX, rotationY);
     camera.placeCamera(mGlProgram);
 
     glm::mat4 lightModel(1.0f);
-    lightModel = glm::rotate(lightModel, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    lightModel = glm::rotate(lightModel, 0.5f*timeDiff, glm::vec3(1.0f, 0.0f, 0.0f));
-    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 0.0f, 200.0f));
+    lightModel = glm::rotate(lightModel, glm::radians(-45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 0.0f, 400.0f));
+    lightModel = glm::rotate(lightModel, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     mLightSource.placeLight(mGlProgram, glm::vec4(lightModel[3]));
 
-    mCube.draw(mGlProgram, rightCubeModel(timeDiff));
-    mCube.draw(mGlProgram, leftCubeModel(timeDiff));
+    mCube.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 1.00, 2.0f)), metalTexture);
+    mCube.draw(mGlProgram, rightCubeModel(timeDiff), metalTexture);
+    mCube.draw(mGlProgram, leftCubeModel(timeDiff), metalTexture);
     mLand.draw(mGlProgram, landModel());
-    mSphere.draw(mGlProgram, sphereModel(timeDiff));
-    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+    mSphere.draw(mGlProgram, sphereModel(timeDiff), jeansTexture);
+    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), jeansTexture);
     mLightSource.draw(mGlProgram);
 
     framebuffer.detachFramebuffer();
@@ -93,6 +99,7 @@ void ObjectsRenderingProgram::setUpViewport(GLFWwindow *pWwindow) {
     int width = 0;
     int height = 0;
     glfwGetWindowSize(pWwindow, &width, &height);
+
     glViewport(0,0,width, height);
 }
 

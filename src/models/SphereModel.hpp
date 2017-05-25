@@ -13,9 +13,9 @@
 
 class SphereModel {
 public:
-    SphereModel(const glm::vec3& color, double radius, unsigned int rows, unsigned int cols);
-    void init(GLuint i);
-    void draw(GLuint program, const glm::mat4 &model);
+    SphereModel(double radius, unsigned int rows, unsigned int cols);
+    void init();
+    void draw(GLuint program, const glm::mat4 &model, Texture &texture);
 
 private:
     std::vector<glm::vec4> mVertices;
@@ -33,7 +33,6 @@ private:
     std::vector<glm::vec4> &normals();
 
     std::vector<glm::vec4> mNormals;
-    Texture mTexture;
     std::vector<glm::vec2> mTexCoords;
     GLuint mTexCoordsBuffer;
     std::vector<glm::vec4> mVerticesUp;

@@ -9,13 +9,10 @@
 #include "SphereModel.hpp"
 #include "../Texture.hpp"
 
-SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int rows, unsigned int cols) {
+SphereModel::SphereModel(double radius, unsigned int rows, unsigned int cols) {
     cols+=2;
     auto colStep = glm::pi<GLfloat>()/(cols);
     auto rowStep = glm::pi<GLfloat>()/rows;
-
-
-
 
     for(std::size_t currentRow = 0; currentRow < 2*rows; currentRow++){
         for(std::size_t currentCol = 0; currentCol < 2*cols+1; currentCol++){
@@ -49,7 +46,7 @@ SphereModel::SphereModel(const glm::vec3 &color, double radius, unsigned int row
 
 }
 
-void SphereModel::init(GLuint mGLProgram) {
+void SphereModel::init() {
     glGenVertexArrays(1, &mVao);
 
     glBindVertexArray(mVao);
@@ -72,8 +69,6 @@ void SphereModel::init(GLuint mGLProgram) {
                  mTexCoords.size() * sizeof(decltype(mTexCoords)::value_type), mTexCoords.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    mTexture.load("textures/SunTexture.png", mGLProgram);
-
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(2);
     glEnableVertexAttribArray(3);
@@ -93,16 +88,13 @@ std::vector<glm::vec4> &SphereModel::normals() {
     return mNormals;
 }
 
-void SphereModel::draw(GLuint program, const glm::mat4 &model) {
+void SphereModel::draw(GLuint program, const glm::mat4 &model, Texture &texture) {
     glBindVertexArray(mVao);
 
-    auto uniformLocation = glGetUniformLocation(program, "useTexture");
+    auto uniformLocation = glGetUniformLocation(program, "useTexCoords");
     glUniform1i(uniformLocation, GL_TRUE);
 
-    uniformLocation = glGetUniformLocation(program, "useTexCoords");
-    glUniform1i(uniformLocation, GL_TRUE);
-
-    mTexture.attach();
+    texture.attach();
 
     uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
@@ -110,12 +102,9 @@ void SphereModel::draw(GLuint program, const glm::mat4 &model) {
     glPointSize(5.0f);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei) (vertices().size()));
 
-    uniformLocation = glGetUniformLocation(program, "useTexture");
-    glUniform1i(uniformLocation, GL_FALSE);
-
     uniformLocation = glGetUniformLocation(program, "useTexCoords");
     glUniform1i(uniformLocation, GL_FALSE);
 
-    mTexture.detach();
+    texture.detach();
     glBindVertexArray(0);
 }
