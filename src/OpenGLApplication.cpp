@@ -30,8 +30,8 @@ void OpenGLApplication::render(GLFWwindow *window) {
     mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer);
     mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff());
 
-    mHDRFramebuffer.attachTexture(0);
-    //mHDRProgram.start(getWidth(), getHeight());
+    //mHDRFramebuffer.attachTexture(0);
+    mHDRProgram.start(getWidth(), getHeight());
 }
 
 glm::vec3 OpenGLApplication::currentPosition() {
@@ -77,8 +77,9 @@ void OpenGLApplication::processButtons() {
         updateStep=true;
     }
 
-    if(updateStep)
+    if(updateStep){
         mStepper.makeStep(stepX, stepZ);
+    }
 }
 
 void OpenGLApplication::onKey(int key, int, int action, int ) {
@@ -146,7 +147,7 @@ void OpenGLApplication::onCursorPositionChanged(double xPosition, double yPositi
     MousePosition currentMousePosition(xPosition, yPosition);
 
     if(mMouseButtonPressed){
-        const double scale=0.0005;
+        const double scale=0.0008;
         mRotationY -= scale*(mMouseCursorPosition.xPosition - currentMousePosition.xPosition);
         mRotationX -= scale*(mMouseCursorPosition.yPosition - currentMousePosition.yPosition);
     }

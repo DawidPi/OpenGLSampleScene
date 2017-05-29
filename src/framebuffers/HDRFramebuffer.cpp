@@ -25,7 +25,7 @@ void HDRFramebuffer::init(unsigned int width, unsigned int height) {
 
     glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+    //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 
     glGenRenderbuffers(1, &mDepthBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mDepthBuffer);
@@ -35,7 +35,6 @@ void HDRFramebuffer::init(unsigned int width, unsigned int height) {
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE ,mMSAATexture, 0);
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0); wtf
     glActiveTexture(GL_TEXTURE0);
     processGLFramebufferStatus();
 }
@@ -46,10 +45,11 @@ void HDRFramebuffer::setUpNoMsaaFramebuffer(unsigned int width, unsigned int hei
     glActiveTexture(GL_TEXTURE4);
     glGenTextures(1, &mFlatTexture);
     glBindTexture(GL_TEXTURE_2D, mFlatTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    processGLError();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenRenderbuffers(1, &mDepthFlatBuffer);
@@ -74,14 +74,14 @@ void HDRFramebuffer::detachFramebuffer() const {
 
 void HDRFramebuffer::attachTexture(GLuint program) const {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, mMSAAFramebuffer);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBlitFramebuffer(0, 0, mWidth, mHeight, 0, 0, mWidth, mHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-//    glBindFramebuffer(GL_READ_FRAMEBUFFER, mMSAAFramebuffer);
-//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mNoMSAAFramebuffer);
-//    glBlitFramebuffer(0,0,mWidth,mHeight, 0,0, mWidth, mHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mNoMSAAFramebuffer);
+    glBlitFramebuffer(0,0,mWidth,mHeight, 0,0, mWidth, mHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    //glUniform1i(glGetUniformLocation(program, "hdrTexture"), 4);
-    //glBindTexture(GL_TEXTURE_2D, mFlatTexture);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, mFlatTexture);
+    glUniform1i(glGetUniformLocation(program, "hdrTexture"), 4);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 HDRFramebuffer::~HDRFramebuffer() {

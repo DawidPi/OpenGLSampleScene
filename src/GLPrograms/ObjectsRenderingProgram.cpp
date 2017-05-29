@@ -76,8 +76,8 @@ void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow
     camera.placeCamera(mGlProgram);
 
     glm::mat4 lightModel(1.0f);
-    lightModel = glm::rotate(lightModel, glm::radians(-45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 0.0f, 400.0f));
+    lightModel = glm::rotate(lightModel, glm::radians(-45.0f - 180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    lightModel = glm::translate(lightModel, glm::vec3(0.0f, 250.0f, 400.0f));
     lightModel = glm::rotate(lightModel, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     mLightSource.placeLight(mGlProgram, glm::vec4(lightModel[3]));

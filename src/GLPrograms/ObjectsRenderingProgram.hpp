@@ -12,7 +12,7 @@
 #include <SkyBox.hpp>
 #include "../light/PointLight.hpp"
 #include "../framebuffers/HDRFramebuffer.hpp"
-#include "../StepperInterploator.hpp"
+#include "../Stepper.hpp"
 
 class ObjectsRenderingProgram {
 public:

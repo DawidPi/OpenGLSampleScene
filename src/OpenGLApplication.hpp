@@ -16,7 +16,7 @@
 #include <QuadModel.hpp>
 #include <SkyBox.hpp>
 #include "OpenGLWindow.hpp"
-#include "StepperInterploator.hpp"
+#include "Stepper.hpp"
 #include "light/PointLight.hpp"
 #include "framebuffers/HDRFramebuffer.hpp"
 #include "GLPrograms/HDRProgram.hpp"
@@ -27,7 +27,7 @@ class OpenGLApplication : public OpenGLWindow {
 public:
     OpenGLApplication() :
             mMouseCursorPosition(0,0),
-            mStepper(std::chrono::milliseconds(20)){}
+            mStepper(0, 0) {}
 
     void init(unsigned int width, unsigned int height) override;
 
@@ -59,7 +59,7 @@ private:
 
     float timeDiff() const;
 
-    StepperInterploator mStepper;
+    Stepper mStepper;
     bool mMoveForward=false;
     bool mMoveBackwards=false;
 

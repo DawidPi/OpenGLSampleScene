@@ -37,13 +37,9 @@ void HDRProgram::createProgramContext() {
 
 void HDRProgram::start(unsigned int screenWidth, unsigned int screenHeight) {
     defaultOpenGLSettings();
-    //const GLfloat depthClear= 1.0f;
-    //glClearBufferfv(GL_DEPTH, 0, &depthClear);
-    //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     glViewport(0,0, screenWidth, screenHeight);
     glUseProgram(mGlProgram);
-    //glClear(GL_COLOR_BUFFER_BIT);
 
     mFramebuffer->attachTexture(mGlProgram);
     mModel.draw();

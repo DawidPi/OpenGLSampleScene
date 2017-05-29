@@ -12,8 +12,8 @@ set(SOURCES
         models/CubeModel.hpp
         models/LandModel.cpp
         models/LandModel.hpp
-        StepperInterploator.cpp
-        StepperInterploator.hpp
+        Stepper.cpp
+        Stepper.hpp
         world/Camera.cpp
         world/Camera.hpp
         light/PointLight.cpp
