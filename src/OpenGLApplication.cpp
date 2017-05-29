@@ -28,10 +28,10 @@ void OpenGLApplication::init(unsigned int width, unsigned int height) {
 void OpenGLApplication::render(GLFWwindow *window) {
     processButtons();
     mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer);
-    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff());
+    //mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff());
 
 
-    mHDRProgram.start(getWidth(), getHeight());
+    //mHDRProgram.start(getWidth(), getHeight());
 }
 
 glm::vec3 OpenGLApplication::currentPosition() {

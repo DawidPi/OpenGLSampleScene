@@ -69,8 +69,8 @@ void SkyBox::init(GLuint program) {
 
     glEnableVertexAttribArray(0);
 
-    glGenTextures(1, &cubeTexture);
     glActiveTexture(GL_TEXTURE2);
+    glGenTextures(1, &cubeTexture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTexture);
 
     std::vector<std::string> texturesNames{
@@ -99,7 +99,6 @@ void SkyBox::init(GLuint program) {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     glActiveTexture(GL_TEXTURE0);
 
@@ -114,9 +113,10 @@ void SkyBox::draw(glm::vec3 cameraPosition) {
     glUniform1i(glGetUniformLocation(mProgram, "skyboxTexture"), 2);
 
 
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, vertices().size());
     glBindVertexArray(0);
     glDepthMask(GL_TRUE);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 const std::vector<GLfloat> &SkyBox::vertices() {
