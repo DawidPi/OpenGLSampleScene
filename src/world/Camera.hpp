@@ -12,7 +12,7 @@
 
 class Camera {
 public:
-    Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY);
+    Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY, double zoom =1.0);
     void placeCamera(GLuint program);
 
     void setView(GLuint program) const;

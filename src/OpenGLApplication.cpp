@@ -27,8 +27,8 @@ void OpenGLApplication::init(unsigned int width, unsigned int height) {
 
 void OpenGLApplication::render(GLFWwindow *window) {
     processButtons();
-    mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer);
-    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff());
+    mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer, zoom);
+    mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff(), zoom);
 
     //mHDRFramebuffer.attachTexture(0);
     mHDRProgram.start(getWidth(), getHeight());
@@ -130,8 +130,15 @@ void OpenGLApplication::onKey(int key, int, int action, int ) {
     }
 }
 
-void OpenGLApplication::onScroll(double, double) {
-
+void OpenGLApplication::onScroll(double xOffset, double yOffset) {
+    std::cout << "yOffset: " << yOffset << std::endl;
+    if(yOffset > 0.1){
+        if(zoom < 50)
+            zoom *= 2;
+    }else if (yOffset < 0.1){
+        if(zoom > 0.5)
+            zoom /= 2;
+    }
 }
 
 void OpenGLApplication::onMouseButton(int button, int action, int) {

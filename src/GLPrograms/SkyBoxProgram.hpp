@@ -15,7 +15,7 @@ class SkyBoxProgram {
 public:
     void init();
     void start(GLFWwindow *window, const glm::vec3 &position, float rotationX, float rotationY,
-                   HDRFramebuffer &framebuffer);
+                   HDRFramebuffer &framebuffer, double zoom);
 
 private:
     GLuint mGLProgram;

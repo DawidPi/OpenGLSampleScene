@@ -5,10 +5,10 @@
 #include <glm/ext.hpp>
 #include "Camera.hpp"
 
-Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY) {
+Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY, double zoom ) {
 
     auto rotationXMatrix = glm::rotate(glm::mat4(1.0f), -rotationX ,glm::vec3(1.0f, 0.0f, 0.0f));
-    mProj = glm::perspective(glm::radians(45.0f), screenRatio, 1.0f, 1000.0f )
+    mProj = glm::perspective(glm::radians(45.0f/(float)zoom), screenRatio, 1.0f, 1000.0f )
                 * rotationXMatrix;
 
     auto rotationYMatrix = glm::rotate(glm::mat4(1.0f), -rotationY ,glm::vec3(0.0f, 1.0f, 0.0f));

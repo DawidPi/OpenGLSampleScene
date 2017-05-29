@@ -28,7 +28,7 @@ void SkyBoxProgram::createProgramContext() {
 
 void
 SkyBoxProgram::start(GLFWwindow *window, const glm::vec3 &position, float rotationX, float rotationY,
-                     HDRFramebuffer &framebuffer) {
+                     HDRFramebuffer &framebuffer, double zoom) {
 
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
@@ -49,7 +49,7 @@ SkyBoxProgram::start(GLFWwindow *window, const glm::vec3 &position, float rotati
         screenHeight=1;
         screenWidth=1;
     }
-    Camera camera(glm::vec3(0.0, 0.0, 0.0), (float)screenWidth/screenHeight, rotationX, rotationY);
+    Camera camera(glm::vec3(0.0, 0.0, 0.0), (float)screenWidth/screenHeight, rotationX, rotationY, zoom);
 
     camera.setView(mGLProgram);
     camera.setProjection(mGLProgram);

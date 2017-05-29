@@ -33,12 +33,7 @@ void PointLight::draw(GLuint program) {
     auto uniformLocation = glGetUniformLocation(program, "isLightSource");
     glUniform1ui(uniformLocation, GL_TRUE);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     mLightBulb.draw(program, glm::translate(glm::mat4(1.0f), glm::vec3(mLightPosition)), mSunTexture);
-
-    glDisable(GL_BLEND);
 
     uniformLocation = glGetUniformLocation(program, "isLightSource");
     glUniform1ui(uniformLocation, GL_FALSE);

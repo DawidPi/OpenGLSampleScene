@@ -54,7 +54,7 @@ void ObjectsRenderingProgram::clearWindow() const {
 }
 
 void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
-                                   float rotationX, float rotationY, float timeDiff) {
+                                   float rotationX, float rotationY, float timeDiff, double zoom) {
     clearWindow();
     setUpViewport(window);
 
@@ -72,7 +72,7 @@ void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow
         width=1;
         height=1;
     }
-    Camera camera(position, static_cast<float>(width)/height, rotationX, rotationY);
+    Camera camera(position, static_cast<float>(width)/height, rotationX, rotationY, zoom);
     camera.placeCamera(mGlProgram);
 
     glm::mat4 lightModel(1.0f);

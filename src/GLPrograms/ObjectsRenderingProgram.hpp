@@ -19,7 +19,7 @@ public:
     ObjectsRenderingProgram(): mSphere(1.0f, 50, 50) {}
     void init();
     void draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
-                  float rotationX, float rotationY, float timeDiff);
+                  float rotationX, float rotationY, float timeDiff, double zoom);
 
 private:
     void createOpenGLProgram();

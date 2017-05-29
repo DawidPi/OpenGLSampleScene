@@ -54,6 +54,7 @@ private:
     MousePosition mMouseCursorPosition;
     float mRotationY=0.0;
     float mRotationX=0.0;
+    double zoom=1.0;
 
     std::chrono::system_clock::time_point mTime;
 
