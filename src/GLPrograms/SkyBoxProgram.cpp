@@ -41,9 +41,9 @@ SkyBoxProgram::start(GLFWwindow *window, const glm::vec3 &position, float rotati
     glViewport(0,0, screenWidth, screenHeight);
     glUseProgram(mGLProgram);
 
-    //framebuffer.attachFramebuffer();
+    framebuffer.attachFramebuffer();
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
 
     if(screenHeight==0){
         screenHeight=1;
@@ -56,6 +56,6 @@ SkyBoxProgram::start(GLFWwindow *window, const glm::vec3 &position, float rotati
 
     mSkyBox.draw(glm::vec3(position));
 
-    //framebuffer.detachFramebuffer();
+    framebuffer.detachFramebuffer();
 }
 

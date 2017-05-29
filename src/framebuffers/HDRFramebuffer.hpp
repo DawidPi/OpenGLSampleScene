@@ -16,11 +16,18 @@ public:
 
     ~HDRFramebuffer();
 private:
-    GLuint mTextureId;
-    GLuint mFramebuffer;
+    GLuint mMSAATexture;
+    GLuint mFlatTexture;
+    GLuint mMSAAFramebuffer;
+    GLuint mNoMSAAFramebuffer;
     GLuint mDepthBuffer;
+    GLuint mDepthFlatBuffer;
+
     unsigned int mWidth;
+
     unsigned int mHeight;
+
+    void setUpNoMsaaFramebuffer(unsigned int width, unsigned int height);
 };
 
 

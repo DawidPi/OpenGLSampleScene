@@ -48,7 +48,7 @@ void ObjectsRenderingProgram::openGLCommonSettings() {
 }
 
 void ObjectsRenderingProgram::clearWindow() const {
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
 }
@@ -59,14 +59,13 @@ void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow
     setUpViewport(window);
 
     glUseProgram(mGlProgram);
-
     int width = 0;
     int height = 0;
     glfwGetWindowSize(window, &width, &height);
 
     framebuffer.attachFramebuffer();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer now
+    glClear(GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer now
     glEnable(GL_DEPTH_TEST);
 
     if(width==0){

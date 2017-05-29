@@ -74,12 +74,13 @@ void SkyBox::init(GLuint program) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTexture);
 
     std::vector<std::string> texturesNames{
-            "textures/SkyBox/skyBoxRight.JPG",
-            "textures/SkyBox/skyBoxLeft.JPG",
-            "textures/SkyBox/skyBoxUp.JPG",
-            "textures/SkyBox/skyBoxDown.JPG",
-            "textures/SkyBox/skyBoxBack.JPG",
-            "textures/SkyBox/skyBoxFront.JPG"
+            "textures/NewSkyBox/skybox_right1.png",
+            "textures/NewSkyBox/skybox_left2.png",
+            "textures/NewSkyBox/skybox_top3.png",
+            "textures/NewSkyBox/skybox_bottom4.png",
+            "textures/NewSkyBox/skybox_front5.png",
+            "textures/NewSkyBox/skybox_back6.png"
+
     };
 
     for(std::size_t textureIdx=0; textureIdx < texturesNames.size(); textureIdx++){

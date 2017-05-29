@@ -9,6 +9,7 @@
 #include <CubeModel.hpp>
 #include <SphereModel.hpp>
 #include <LandModel.hpp>
+#include <SkyBox.hpp>
 #include "../light/PointLight.hpp"
 #include "../framebuffers/HDRFramebuffer.hpp"
 #include "../StepperInterploator.hpp"
