@@ -9,6 +9,7 @@
 #include <glm/detail/type_mat.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 #include "SkyBox.hpp"
 
 const std::vector<GLfloat> SkyBox::mVertices{

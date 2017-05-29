@@ -25,7 +25,6 @@ void HDRFramebuffer::init(unsigned int width, unsigned int height) {
 
     glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 
     glGenRenderbuffers(1, &mDepthBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mDepthBuffer);

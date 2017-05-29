@@ -30,7 +30,6 @@ void OpenGLApplication::render(GLFWwindow *window) {
     mSkyBoxProgram.start(window, currentPosition(), mRotationX, mRotationY, mHDRFramebuffer, zoom);
     mObjectsProgram.draw(mHDRFramebuffer, window, currentPosition(), mRotationX, mRotationY, timeDiff(), zoom);
 
-    //mHDRFramebuffer.attachTexture(0);
     mHDRProgram.start(getWidth(), getHeight());
 }
 
