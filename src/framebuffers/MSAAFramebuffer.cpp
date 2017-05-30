@@ -4,10 +4,10 @@
 
 #include <glad/glad.h>
 #include <cassert>
-#include "HDRFramebuffer.hpp"
+#include "MSAAFramebuffer.hpp"
 #include "../glErrorCheck.hpp"
 
-void HDRFramebuffer::init(unsigned int width, unsigned int height) {
+void MSAAFramebuffer::init(unsigned int width, unsigned int height) {
     mWidth = width;
     mHeight = height;
 
@@ -38,12 +38,12 @@ void HDRFramebuffer::init(unsigned int width, unsigned int height) {
     processGLFramebufferStatus();
 }
 
-void HDRFramebuffer::setUpNoMsaaFramebuffer(unsigned int width, unsigned int height) {
+void MSAAFramebuffer::setUpNoMsaaFramebuffer(unsigned int width, unsigned int height) {
     glBindFramebuffer(GL_FRAMEBUFFER, mNoMSAAFramebuffer);
 
     glActiveTexture(GL_TEXTURE4);
-    glGenTextures(1, &mFlatTexture);
-    glBindTexture(GL_TEXTURE_2D, mFlatTexture);
+    glGenTextures(1, &mNoMSAATexture);
+    glBindTexture(GL_TEXTURE_2D, mNoMSAATexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -57,33 +57,37 @@ void HDRFramebuffer::setUpNoMsaaFramebuffer(unsigned int width, unsigned int hei
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, mDepthFlatBuffer);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D ,mFlatTexture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D ,mNoMSAATexture, 0);
 
     glActiveTexture(GL_TEXTURE0);
     processGLFramebufferStatus();
 }
 
-void HDRFramebuffer::attachFramebuffer() const {
+void MSAAFramebuffer::attachFramebuffer() const {
     glBindFramebuffer(GL_FRAMEBUFFER, mMSAAFramebuffer);
 }
 
-void HDRFramebuffer::detachFramebuffer() const {
+void MSAAFramebuffer::detachFramebuffer() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void HDRFramebuffer::attachTexture(GLuint program) const {
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, mMSAAFramebuffer);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mNoMSAAFramebuffer);
-    glBlitFramebuffer(0,0,mWidth,mHeight, 0,0, mWidth, mHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+void MSAAFramebuffer::attachTexture(GLint uniformLocation) const {
     glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, mFlatTexture);
-    glUniform1i(glGetUniformLocation(program, "hdrTexture"), 4);
+    glBindTexture(GL_TEXTURE_2D, mNoMSAATexture);
+    glUniform1i(uniformLocation, 4);
     glActiveTexture(GL_TEXTURE0);
 }
 
-HDRFramebuffer::~HDRFramebuffer() {
-    glDeleteFramebuffers(GL_FRAMEBUFFER, &mMSAAFramebuffer);
-    glDeleteFramebuffers(GL_FRAMEBUFFER, &mNoMSAAFramebuffer);
+void MSAAFramebuffer::calculate2DTexture() const {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mMSAAFramebuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mNoMSAAFramebuffer);
+    glBlitFramebuffer(0, 0, mWidth, mHeight, 0, 0, mWidth, mHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+MSAAFramebuffer::~MSAAFramebuffer() {
+    glDeleteFramebuffers(1, &mMSAAFramebuffer);
+    glDeleteTextures(1, &mMSAATexture);
+    glDeleteFramebuffers(1, &mNoMSAAFramebuffer);
+    glDeleteTextures(1, &mNoMSAATexture);
 }

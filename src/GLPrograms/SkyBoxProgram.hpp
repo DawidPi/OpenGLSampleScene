@@ -9,13 +9,13 @@
 #include <SkyBox.hpp>
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
-#include "../framebuffers/HDRFramebuffer.hpp"
+#include "../framebuffers/MSAAFramebuffer.hpp"
 
 class SkyBoxProgram {
 public:
     void init();
     void start(GLFWwindow *window, const glm::vec3 &position, float rotationX, float rotationY,
-                   HDRFramebuffer &framebuffer, double zoom);
+                   MSAAFramebuffer &framebuffer, double zoom);
 
 private:
     GLuint mGLProgram;
@@ -24,7 +24,7 @@ private:
 
     void createProgramContext();
 
-    const HDRFramebuffer *mFramebuffer;
+    const MSAAFramebuffer *mFramebuffer;
     SkyBox mSkyBox;
 };
 

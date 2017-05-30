@@ -7,17 +7,21 @@
 
 #include <glad/glad.h>
 
-class HDRFramebuffer {
+class MSAAFramebuffer {
 public:
     void init(unsigned int width, unsigned int height);
     void attachFramebuffer() const ;
     void detachFramebuffer() const ;
-    void attachTexture(GLuint program) const ;
+    void attachTexture(GLint uniformLocation) const ;
+    void calculate2DTexture() const;
+    GLuint noMSAAID(){
+        return mNoMSAAFramebuffer;
+    }
 
-    ~HDRFramebuffer();
+    ~MSAAFramebuffer();
 private:
     GLuint mMSAATexture;
-    GLuint mFlatTexture;
+    GLuint mNoMSAATexture;
     GLuint mMSAAFramebuffer;
     GLuint mNoMSAAFramebuffer;
     GLuint mDepthBuffer;

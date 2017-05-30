@@ -21,7 +21,7 @@ set(SOURCES
         models/SphereModel.cpp
         models/SphereModel.hpp
         Texture.cpp
-        Texture.hpp framebuffers/HDRFramebuffer.cpp framebuffers/HDRFramebuffer.hpp models/QuadModel.cpp models/QuadModel.hpp glErrorCheck.hpp GLPrograms/HDRProgram.cpp GLPrograms/HDRProgram.hpp models/SkyBox.cpp models/SkyBox.hpp GLPrograms/ObjectsRenderingProgram.cpp GLPrograms/ObjectsRenderingProgram.hpp GLPrograms/SkyBoxProgram.cpp GLPrograms/SkyBoxProgram.hpp)
+        Texture.hpp framebuffers/MSAAFramebuffer.cpp framebuffers/MSAAFramebuffer.hpp models/QuadModel.cpp models/QuadModel.hpp glErrorCheck.hpp GLPrograms/PostProcessingProgram.cpp GLPrograms/PostProcessingProgram.hpp models/SkyBox.cpp models/SkyBox.hpp GLPrograms/ObjectsRenderingProgram.cpp GLPrograms/ObjectsRenderingProgram.hpp GLPrograms/SkyBoxProgram.cpp GLPrograms/SkyBoxProgram.hpp framebuffers/DownSamplingFramebuffer.cpp framebuffers/DownSamplingFramebuffer.hpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 

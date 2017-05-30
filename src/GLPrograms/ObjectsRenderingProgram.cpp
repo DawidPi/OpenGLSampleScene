@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "ObjectsRenderingProgram.hpp"
 #include "../ShaderNecromanter.hpp"
-#include "../framebuffers/HDRFramebuffer.hpp"
+#include "../framebuffers/MSAAFramebuffer.hpp"
 #include "../world/Camera.hpp"
 #include "../glErrorCheck.hpp"
 
@@ -20,7 +20,7 @@ void ObjectsRenderingProgram::init() {
     mLightSource.init(mGlProgram);
     mLand.init(mGlProgram);
     metalTexture.load("textures/MetalCubeTexture.jpg", mGlProgram);
-    jeansTexture.load("textures/jeansTexture.jpg", mGlProgram);
+    iceTexture.load("textures/ice.jpg", mGlProgram);
 }
 
 void ObjectsRenderingProgram::createOpenGLProgram() {
@@ -52,7 +52,7 @@ void ObjectsRenderingProgram::clearWindow() const {
     glClearBufferfv(GL_DEPTH, 0, &depthClear);
 }
 
-void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
+void ObjectsRenderingProgram::draw(const MSAAFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
                                    float rotationX, float rotationY, float timeDiff, double zoom) {
     clearWindow();
     setUpViewport(window);
@@ -85,8 +85,8 @@ void ObjectsRenderingProgram::draw(const HDRFramebuffer &framebuffer, GLFWwindow
     mCube.draw(mGlProgram, rightCubeModel(timeDiff), metalTexture);
     mCube.draw(mGlProgram, leftCubeModel(timeDiff), metalTexture);
     mLand.draw(mGlProgram, landModel());
-    mSphere.draw(mGlProgram, sphereModel(timeDiff), jeansTexture);
-    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), jeansTexture);
+    mSphere.draw(mGlProgram, sphereModel(timeDiff), iceTexture);
+    mSphere.draw(mGlProgram, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, (5*std::abs(cos(2*timeDiff))+2.5f), 2.0f)), iceTexture);
     mLightSource.draw(mGlProgram);
 
     framebuffer.detachFramebuffer();

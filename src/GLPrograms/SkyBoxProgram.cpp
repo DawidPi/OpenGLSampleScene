@@ -28,7 +28,7 @@ void SkyBoxProgram::createProgramContext() {
 
 void
 SkyBoxProgram::start(GLFWwindow *window, const glm::vec3 &position, float rotationX, float rotationY,
-                     HDRFramebuffer &framebuffer, double zoom) {
+                     MSAAFramebuffer &framebuffer, double zoom) {
 
     const GLfloat depthClear= 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depthClear);

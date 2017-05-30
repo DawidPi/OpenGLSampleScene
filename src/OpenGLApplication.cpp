@@ -20,7 +20,7 @@ void OpenGLApplication::init(unsigned int width, unsigned int height) {
     mSkyBoxProgram.init();
     mQuadModel.init();
     mHDRFramebuffer.init(width, height);
-    mHDRProgram.init(mHDRFramebuffer);
+    mHDRProgram.init(mHDRFramebuffer, width, height);
 
     mTime = std::chrono::system_clock::now();
 }
@@ -129,8 +129,7 @@ void OpenGLApplication::onKey(int key, int, int action, int ) {
     }
 }
 
-void OpenGLApplication::onScroll(double xOffset, double yOffset) {
-    std::cout << "yOffset: " << yOffset << std::endl;
+void OpenGLApplication::onScroll(double, double yOffset) {
     if(yOffset > 0.1){
         if(zoom < 50)
             zoom *= 2;

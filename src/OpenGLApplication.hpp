@@ -18,8 +18,8 @@
 #include "OpenGLWindow.hpp"
 #include "Stepper.hpp"
 #include "light/PointLight.hpp"
-#include "framebuffers/HDRFramebuffer.hpp"
-#include "GLPrograms/HDRProgram.hpp"
+#include "framebuffers/MSAAFramebuffer.hpp"
+#include "GLPrograms/PostProcessingProgram.hpp"
 #include "GLPrograms/ObjectsRenderingProgram.hpp"
 #include "GLPrograms/SkyBoxProgram.hpp"
 
@@ -71,8 +71,8 @@ private:
 
     glm::vec3 currentPosition();
 
-    HDRFramebuffer mHDRFramebuffer;
-    HDRProgram mHDRProgram;
+    MSAAFramebuffer mHDRFramebuffer;
+    PostProcessingProgram mHDRProgram;
     QuadModel mQuadModel;
 
     ObjectsRenderingProgram mObjectsProgram;

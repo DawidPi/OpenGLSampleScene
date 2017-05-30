@@ -11,14 +11,14 @@
 #include <LandModel.hpp>
 #include <SkyBox.hpp>
 #include "../light/PointLight.hpp"
-#include "../framebuffers/HDRFramebuffer.hpp"
+#include "../framebuffers/MSAAFramebuffer.hpp"
 #include "../Stepper.hpp"
 
 class ObjectsRenderingProgram {
 public:
     ObjectsRenderingProgram(): mSphere(1.0f, 50, 50) {}
     void init();
-    void draw(const HDRFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
+    void draw(const MSAAFramebuffer &framebuffer, GLFWwindow *window, const glm::vec3 &position,
                   float rotationX, float rotationY, float timeDiff, double zoom);
 
 private:
@@ -47,7 +47,7 @@ private:
     glm::mat4 sphereModel(float timeDiff);
 
     Texture metalTexture;
-    Texture jeansTexture;
+    Texture iceTexture;
 };
 
 
