@@ -30,6 +30,7 @@ void PostProcessingProgram::createProgramContext() {
     mVertexShader = ShaderNecromanter().spawnShader(GL_VERTEX_SHADER, "glsl/VertexHDR.glsl");
     mFragmentHDRShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentHDR.glsl");
     mFragmentVerticalBlurShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentVertBlur.glsl");
+    mFragmentHorizontalBlurShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentHorizBlur.glsl");
     glAttachShader(mGlHDRProgram, mVertexShader);
     glAttachShader(mGlHDRProgram, mFragmentHDRShader);
     glLinkProgram(mGlHDRProgram);
@@ -39,12 +40,21 @@ void PostProcessingProgram::createProgramContext() {
     glAttachShader(mGlVertBlurProgram, mFragmentVerticalBlurShader);
     glLinkProgram(mGlVertBlurProgram);
 
+    mGlHorizBlurProgram = glCreateProgram();
+    glAttachShader(mGlHorizBlurProgram, mVertexShader);
+    glAttachShader(mGlHorizBlurProgram, mFragmentHorizontalBlurShader);
+    glLinkProgram(mGlHorizBlurProgram);
+
     int isLinked = 0;
     glGetProgramiv(mGlHDRProgram, GL_LINK_STATUS, &isLinked);
     if(isLinked == GL_FALSE)
         throw std::runtime_error("OpenGL could not link");
 
     glGetProgramiv(mGlVertBlurProgram, GL_LINK_STATUS, &isLinked);
+    if(isLinked == GL_FALSE)
+        throw std::runtime_error("OpenGL could not link");
+
+    glGetProgramiv(mGlHorizBlurProgram, GL_LINK_STATUS, &isLinked);
     if(isLinked == GL_FALSE)
         throw std::runtime_error("OpenGL could not link");
 }

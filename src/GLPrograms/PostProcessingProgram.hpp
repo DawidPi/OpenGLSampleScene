@@ -18,8 +18,10 @@ private:
     GLuint mGlHDRProgram;
     GLuint mVertexShader;
     GLuint mFragmentHDRShader;
+    GLuint mFragmentHorizontalBlurShader;
     GLuint mFragmentVerticalBlurShader;
     GLuint mGlVertBlurProgram;
+    GLuint mGlHorizBlurProgram;
 
     QuadModel mModel;
 
