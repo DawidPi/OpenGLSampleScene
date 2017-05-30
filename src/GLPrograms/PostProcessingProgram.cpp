@@ -14,6 +14,7 @@ void PostProcessingProgram::init(MSAAFramebuffer& framebuffer, unsigned int widt
     mMSAAFramebuffer = &framebuffer;
     mDownSamplingFramebuffer.init(width/2, height/2);
     mModel.init();
+    mCasualFramebuffer.init(width, height);
 }
 
 void PostProcessingProgram::defaultOpenGLSettings() const {
@@ -69,9 +70,16 @@ void PostProcessingProgram::start(unsigned int screenWidth, unsigned int screenH
     glUniform2fv(glGetUniformLocation(mGlVertBlurProgram, "screenSize"), 1, glm::value_ptr(screenSize));
 
     mMSAAFramebuffer->calculate2DTexture();
-    GLint uniformLocation = glGetUniformLocation(mGlVertBlurProgram, "cubeTexture");
-    assert(uniformLocation != -1);
     mDownSamplingFramebuffer.downSampleFromFramebuffer(mMSAAFramebuffer->noMSAAID(), screenWidth, screenHeight);
     mDownSamplingFramebuffer.attachTexture(glGetUniformLocation(mGlVertBlurProgram, "cubeTexture"));
+    mCasualFramebuffer.attachFramebuffer();
+    mModel.draw();
+    mCasualFramebuffer.detachFramebuffer();
+
+    glUseProgram(mGlHorizBlurProgram);
+
+    glUniform2fv(glGetUniformLocation(mGlHorizBlurProgram, "screenSize"), 1, glm::value_ptr(screenSize));
+
+    mCasualFramebuffer.attachTexture(glGetUniformLocation(mGlHorizBlurProgram, "cubeTexture"));
     mModel.draw();
 }

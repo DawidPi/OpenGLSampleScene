@@ -9,6 +9,7 @@
 #include <QuadModel.hpp>
 #include "../framebuffers/MSAAFramebuffer.hpp"
 #include "../framebuffers/DownSamplingFramebuffer.hpp"
+#include "../framebuffers/CasualFramebuffer.hpp"
 
 class PostProcessingProgram {
 public:
@@ -30,6 +31,7 @@ private:
     void defaultOpenGLSettings() const;
     MSAAFramebuffer * mMSAAFramebuffer;
     DownSamplingFramebuffer mDownSamplingFramebuffer;
+    CasualFramebuffer mCasualFramebuffer;
 };
 
 

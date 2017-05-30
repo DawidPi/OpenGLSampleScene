@@ -41,13 +41,18 @@ void DownSamplingFramebuffer::attachTexture(GLint uniformLocation) {
     glActiveTexture(GL_TEXTURE0);
 }
 
+
 DownSamplingFramebuffer::~DownSamplingFramebuffer() {
     glDeleteFramebuffers(1, &mFramebuffer);
     glDeleteTextures(1, &mDownsampledTexture);
 }
 
-void DownSamplingFramebuffer::attachToScreen() {
+void DownSamplingFramebuffer::attachFramebuffer() {
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+}
 
+void DownSamplingFramebuffer::detachFramebuffer() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 

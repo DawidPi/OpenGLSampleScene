@@ -13,7 +13,9 @@ public:
     void downSampleFromFramebuffer(GLuint otherFramebufferId, unsigned int otherWidth,
                                    unsigned int otherHeight);
     void attachTexture(GLint uniformLocation);
-    void attachToScreen();
+
+    void attachFramebuffer();
+    void detachFramebuffer();
 
     ~DownSamplingFramebuffer();
 private:
