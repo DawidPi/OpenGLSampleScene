@@ -17,6 +17,8 @@ public:
     void attachFramebuffer();
     void detachFramebuffer();
 
+    void castToScreen();
+
     ~DownSamplingFramebuffer();
 private:
 

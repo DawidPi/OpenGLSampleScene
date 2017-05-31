@@ -61,6 +61,8 @@ void MSAAFramebuffer::setUpNoMsaaFramebuffer(unsigned int width, unsigned int he
 
     glActiveTexture(GL_TEXTURE0);
     processGLFramebufferStatus();
+
+    detachFramebuffer();
 }
 
 void MSAAFramebuffer::attachFramebuffer() const {

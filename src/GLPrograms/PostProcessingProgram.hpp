@@ -9,7 +9,7 @@
 #include <QuadModel.hpp>
 #include "../framebuffers/MSAAFramebuffer.hpp"
 #include "../framebuffers/DownSamplingFramebuffer.hpp"
-#include "../framebuffers/CasualFramebuffer.hpp"
+#include "../framebuffers/DoubleFramebuffer.hpp"
 
 class PostProcessingProgram {
 public:
@@ -23,6 +23,8 @@ private:
     GLuint mFragmentVerticalBlurShader;
     GLuint mGlVertBlurProgram;
     GLuint mGlHorizBlurProgram;
+    GLuint mGlBrightnessFilterProgram;
+    GLuint mFragmentBrightnessFilter;
 
     QuadModel mModel;
 
@@ -31,7 +33,7 @@ private:
     void defaultOpenGLSettings() const;
     MSAAFramebuffer * mMSAAFramebuffer;
     DownSamplingFramebuffer mDownSamplingFramebuffer;
-    CasualFramebuffer mCasualFramebuffer;
+    DoubleFramebuffer mCasualFramebuffer;
 };
 
 

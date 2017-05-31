@@ -15,6 +15,7 @@ void PostProcessingProgram::init(MSAAFramebuffer& framebuffer, unsigned int widt
     mDownSamplingFramebuffer.init(width/2, height/2);
     mModel.init();
     mCasualFramebuffer.init(width, height);
+    mCasualFramebuffer.attachFramebuffer();
 }
 
 void PostProcessingProgram::defaultOpenGLSettings() const {
@@ -32,6 +33,8 @@ void PostProcessingProgram::createProgramContext() {
     mFragmentHDRShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentHDR.glsl");
     mFragmentVerticalBlurShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentVertBlur.glsl");
     mFragmentHorizontalBlurShader = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentHorizBlur.glsl");
+    mFragmentBrightnessFilter = ShaderNecromanter().spawnShader(GL_FRAGMENT_SHADER, "glsl/FragmentBrightnessFilter.glsl");
+
     glAttachShader(mGlHDRProgram, mVertexShader);
     glAttachShader(mGlHDRProgram, mFragmentHDRShader);
     glLinkProgram(mGlHDRProgram);
@@ -46,6 +49,11 @@ void PostProcessingProgram::createProgramContext() {
     glAttachShader(mGlHorizBlurProgram, mFragmentHorizontalBlurShader);
     glLinkProgram(mGlHorizBlurProgram);
 
+    mGlBrightnessFilterProgram = glCreateProgram();
+    glAttachShader(mGlBrightnessFilterProgram, mVertexShader);
+    glAttachShader(mGlBrightnessFilterProgram, mFragmentBrightnessFilter);
+    glLinkProgram(mGlBrightnessFilterProgram);
+
     int isLinked = 0;
     glGetProgramiv(mGlHDRProgram, GL_LINK_STATUS, &isLinked);
     if(isLinked == GL_FALSE)
@@ -58,28 +66,41 @@ void PostProcessingProgram::createProgramContext() {
     glGetProgramiv(mGlHorizBlurProgram, GL_LINK_STATUS, &isLinked);
     if(isLinked == GL_FALSE)
         throw std::runtime_error("OpenGL could not link");
+
+    glGetProgramiv(mGlBrightnessFilterProgram, GL_LINK_STATUS, &isLinked);
+    if(isLinked == GL_FALSE)
+        throw std::runtime_error("OpenGL could not link");
 }
 
 void PostProcessingProgram::start(unsigned int screenWidth, unsigned int screenHeight) {
     defaultOpenGLSettings();
+    glViewport(0,0, screenWidth, screenHeight);
+
+//    glUseProgram(mGlBrightnessFilterProgram);
+    mMSAAFramebuffer->calculate2DTexture();
+    mDownSamplingFramebuffer.downSampleFromFramebuffer(mMSAAFramebuffer->noMSAAID(), screenWidth, screenHeight);
+//    mDownSamplingFramebuffer.castToScreen();
+//    mDownSamplingFramebuffer.attachTexture(glGetUniformLocation(mGlVertBlurProgram, "cubeTexture"));
+//    mCasualFramebuffer.attachFramebuffer();
+//    mModel.draw();
+//    mCasualFramebuffer.castToScreen();
 
     glViewport(0,0, screenWidth, screenHeight);
     glUseProgram(mGlVertBlurProgram);
-
     auto screenSize = glm::vec2((float)screenWidth/2, (float)screenHeight/2);
     glUniform2fv(glGetUniformLocation(mGlVertBlurProgram, "screenSize"), 1, glm::value_ptr(screenSize));
 
-    mMSAAFramebuffer->calculate2DTexture();
-    mDownSamplingFramebuffer.downSampleFromFramebuffer(mMSAAFramebuffer->noMSAAID(), screenWidth, screenHeight);
+
     mDownSamplingFramebuffer.attachTexture(glGetUniformLocation(mGlVertBlurProgram, "cubeTexture"));
     mCasualFramebuffer.attachFramebuffer();
     mModel.draw();
     mCasualFramebuffer.detachFramebuffer();
 
     glUseProgram(mGlHorizBlurProgram);
+    mCasualFramebuffer.swapFramebuffer();
 
     glUniform2fv(glGetUniformLocation(mGlHorizBlurProgram, "screenSize"), 1, glm::value_ptr(screenSize));
-
     mCasualFramebuffer.attachTexture(glGetUniformLocation(mGlHorizBlurProgram, "cubeTexture"));
     mModel.draw();
+    mCasualFramebuffer.castToScreen();
 }
