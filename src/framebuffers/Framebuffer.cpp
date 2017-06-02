@@ -5,15 +5,16 @@
 #include "Framebuffer.hpp"
 #include "../glErrorCheck.hpp"
 
-void Framebuffer::init(unsigned int width, unsigned int height) {
+void Framebuffer::init(unsigned int width, unsigned int height, GLuint textureID) {
     mWidth = width;
     mHeight = height;
+    mTextureId = textureID;
 
     glGenFramebuffers(1, &mFramebuffer);
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 
-    glActiveTexture(GL_TEXTURE8);
+    glActiveTexture(mTextureId);
     glGenTextures(1, &mTexture);
     glBindTexture(GL_TEXTURE_2D, mTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
@@ -49,9 +50,9 @@ void Framebuffer::detachFramebuffer() {
 }
 
 void Framebuffer::attachTexture(GLint uniformLocation) {
-    glActiveTexture(GL_TEXTURE8);
+    glActiveTexture(mTextureId);
     glBindTexture(GL_TEXTURE_2D, mTexture);
-    glUniform1i(uniformLocation, 8);
+    glUniform1i(uniformLocation, mTextureId - GL_TEXTURE0);
     glActiveTexture(GL_TEXTURE0);
 }
 

@@ -10,7 +10,7 @@
 
 class Framebuffer {
 public:
-    void init(unsigned int width, unsigned int height);
+    void init(unsigned int width, unsigned int height, GLuint textureID);
     void attachFramebuffer();
     void detachFramebuffer();
     void attachTexture(GLint uniformLocation);
@@ -23,6 +23,7 @@ private:
     GLuint mFramebuffer;
     GLuint mTexture;
     GLuint mDepthBuffer;
+    GLuint mTextureId;
 };
 
 

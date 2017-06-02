@@ -7,5 +7,5 @@ uniform sampler2D cubeTexture;
 
 void main() {
     vec3 color = texture(cubeTexture, texCoords).rgb;
-    fs_color =  vec4(0.25*length(color) * color, 1.0);
+    fs_color =  vec4(0.75*length(color) * color, 1.0);
 }

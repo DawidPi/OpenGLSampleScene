@@ -15,7 +15,7 @@ void PostProcessingProgram::init(MSAAFramebuffer& framebuffer, unsigned int widt
     mDownSamplingFramebuffer.init(width/2, height/2);
     mModel.init();
     mDoubleLowResFramebuffer.init(width/2, height/2);
-    fullFramebuffer.init(width, height);
+    fullFramebuffer.init(width, height, GL_TEXTURE0+8);
 }
 
 void PostProcessingProgram::defaultOpenGLSettings() const {

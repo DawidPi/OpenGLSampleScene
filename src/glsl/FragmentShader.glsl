@@ -26,7 +26,7 @@ void main(void)
     vec3 ambientColor = vec3(colorAmbientScale, colorAmbientScale, colorAmbientScale) * chosenColor.rgb;
 
     if(isLightSource){
-        fs_color = 500*vec4(chosenColor.rgb, 1.0);
+        fs_color = 2.5*vec4(chosenColor.rgb, 1.0);
     } else {
         vec4 incidentRayDiffuseVector = vec4(lightPosition.xyz,0.0);
         float lightingFactor = dot(normalize(incidentRayDiffuseVector), normalize(normalPosition));
@@ -38,7 +38,7 @@ void main(void)
         float reflectFactor = dot(eyeDirection, reflection);
         reflectFactor = max(0.0, reflectFactor);
 
-        float lightPower = 640000;
+        float lightPower = 320000;
         vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight, 2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
         vec3 specularColor = vec3(0);// commonColor * pow(reflectFactor,50) * 25*lightPower/(distance(cameraPosition, worldPosition));
