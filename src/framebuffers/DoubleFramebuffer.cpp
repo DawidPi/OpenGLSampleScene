@@ -19,8 +19,10 @@ void DoubleFramebuffer::init(unsigned int width, unsigned int height) {
     glBindTexture(GL_TEXTURE_2D, mFirstTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glGenRenderbuffers(1, &mFirstDepthBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mFirstDepthBuffer);
@@ -32,6 +34,12 @@ void DoubleFramebuffer::init(unsigned int width, unsigned int height) {
 
     glActiveTexture(GL_TEXTURE0);
     processGLFramebufferStatus();
+
+    const GLfloat depthClear= 1.0f;
+    glClearBufferfv(GL_DEPTH, 0, &depthClear);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glViewport(0,0, width, height);
+
     detachFramebuffer();
 
     glGenFramebuffers(1, &mSecondFramebuffer);
@@ -42,8 +50,10 @@ void DoubleFramebuffer::init(unsigned int width, unsigned int height) {
     glBindTexture(GL_TEXTURE_2D, mSecondTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glGenRenderbuffers(1, &mSecondDepthBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, mSecondDepthBuffer);
@@ -56,6 +66,13 @@ void DoubleFramebuffer::init(unsigned int width, unsigned int height) {
     glActiveTexture(GL_TEXTURE0);
 
     processGLFramebufferStatus();
+
+    glClearBufferfv(GL_DEPTH, 0, &depthClear);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glViewport(0,0, width, height);
+
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     mCurrentlyUsed = NONE;
 }
@@ -75,6 +92,8 @@ void DoubleFramebuffer::attachTexture(GLint uniformLocation) {
     glBindTexture(GL_TEXTURE_2D, mFirstTexture);
     glUniform1i(uniformLocation, 7);
     glActiveTexture(GL_TEXTURE0);
+
+    mCurrentlyBoundTexture = FIRST;
 }
 
 void DoubleFramebuffer::castToScreen() {
@@ -92,5 +111,18 @@ void DoubleFramebuffer::swapFramebuffer() {
     else{
         glBindFramebuffer(GL_FRAMEBUFFER, mFirstFramebuffer);
         mCurrentlyUsed = FIRST;
+    }
+}
+
+void DoubleFramebuffer::swapTexture(GLint newUniformLocation) {
+    if(mCurrentlyBoundTexture == NONE or mCurrentlyBoundTexture == SECOND){
+        attachTexture(newUniformLocation);
+    }else{
+        glActiveTexture(GL_TEXTURE6);
+        glBindTexture(GL_TEXTURE_2D, mSecondTexture);
+        glUniform1i(newUniformLocation, 6);
+        glActiveTexture(GL_TEXTURE0);
+
+        mCurrentlyBoundTexture = SECOND;
     }
 }

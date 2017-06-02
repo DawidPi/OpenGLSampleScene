@@ -21,6 +21,8 @@ public:
 
     void swapFramebuffer();
 
+    void swapTexture(GLint newUniformLocation);
+
 private:
     unsigned int mWidth;
     unsigned int mHeight;
@@ -33,6 +35,7 @@ private:
     Usage mCurrentlyUsed;
     GLint mLastUniformLocation;
     bool mTextureAttached=false;
+    Usage mCurrentlyBoundTexture = NONE;
 };
 
 

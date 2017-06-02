@@ -10,6 +10,7 @@
 #include "../framebuffers/MSAAFramebuffer.hpp"
 #include "../framebuffers/DownSamplingFramebuffer.hpp"
 #include "../framebuffers/DoubleFramebuffer.hpp"
+#include "../framebuffers/Framebuffer.hpp"
 
 class PostProcessingProgram {
 public:
@@ -33,7 +34,10 @@ private:
     void defaultOpenGLSettings() const;
     MSAAFramebuffer * mMSAAFramebuffer;
     DownSamplingFramebuffer mDownSamplingFramebuffer;
-    DoubleFramebuffer mCasualFramebuffer;
+    DoubleFramebuffer mDoubleLowResFramebuffer;
+    GLuint mSummingProgram;
+    GLuint mFragmentSummingShader;
+    Framebuffer fullFramebuffer;
 };
 
 

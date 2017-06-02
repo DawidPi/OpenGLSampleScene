@@ -8,8 +8,11 @@ uniform sampler2D hdrTexture;
 void main() {
     const float gamma = 2.2;
 
+    clamp(texCoords.x, 0.001, 0.999);
+    clamp(texCoords.y, 0.001, 0.999);
+
     vec3 hdrColor = vec3(texture(hdrTexture, texCoords, 0));
-    float exposure = 1.5;
+    float exposure = 1.0;
     vec3 exposureMapping = vec3(1.0) - exp(-hdrColor * exposure);
     exposureMapping = pow(exposureMapping, vec3(1.0/gamma));
 

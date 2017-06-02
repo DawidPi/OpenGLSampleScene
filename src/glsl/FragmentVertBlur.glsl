@@ -7,14 +7,16 @@ uniform sampler2D cubeTexture;
 uniform vec2 screenSize;
 
 void main() {
-    float sumWeights = 9.0;
-    float[5] weights = float[](1.0/sumWeights, 2.0/sumWeights, 3.0/sumWeights, 2.0/sumWeights, 1.0/sumWeights);
+    float sumWeights = 64.0;
+    float[7] weights = float[](1.0/sumWeights, 6.0/sumWeights, 15.0/sumWeights, 20.0/sumWeights,
+     15.0/sumWeights, 6.0/sumWeights, 1.0/sumWeights);
 
     vec3 outputTexelValue = vec3(0.0);
 
-    for(int vertIdx=0; vertIdx < 5; vertIdx++){
-        vec2 textureOffset = vec2(0.0, -2.0 + vertIdx)/screenSize;
-        outputTexelValue += weights[vertIdx] * vec3(texture(cubeTexture, texCoords + textureOffset));
+    for(int vertIdx=0; vertIdx < 7; vertIdx++){
+        vec2 textureOffset = vec2(0.0, -3.0 + vertIdx)/screenSize;
+        vec2 finalPosition = texCoords + textureOffset;
+        outputTexelValue += weights[vertIdx] * vec3(texture(cubeTexture, finalPosition));
     }
 
     fs_color = vec4(outputTexelValue, 1.0);
