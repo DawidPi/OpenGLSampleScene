@@ -3,6 +3,7 @@
 //
 
 #include <glm/ext.hpp>
+#include <iostream>
 #include "Camera.hpp"
 
 Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotationX, float rotationY, double zoom ) {
@@ -20,7 +21,8 @@ Camera::Camera(const glm::vec3 &cameraPosition, float screenRatio, float rotatio
             );
 
     mCameraPos = glm::vec4(cameraPosition,1.0f);
-    mLookDirection = rotationYMatrix * glm::vec4(cameraPosition + glm::vec3(0.0f,0.0f,1000.0f),1.0f);
+    mLookDirection = rotationYMatrix * rotationXMatrix * glm::vec4(cameraPosition + glm::vec3(0.0f,0.0f,1000.0f),1.0f);
+    std::cout << glm::to_string(mLookDirection) << std::endl;
 }
 
 void Camera::placeCamera(GLuint program) {

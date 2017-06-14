@@ -99,10 +99,16 @@ void SphereModel::draw(GLuint program, const glm::mat4 &model, Texture &texture)
     uniformLocation = glGetUniformLocation(program, "model");
     glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(model));
 
+    uniformLocation = glGetUniformLocation(program, "useHalo");
+    glUniform1i(uniformLocation, GL_TRUE);
+
     glPointSize(5.0f);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei) (vertices().size()));
 
     uniformLocation = glGetUniformLocation(program, "useTexCoords");
+    glUniform1i(uniformLocation, GL_FALSE);
+
+    uniformLocation = glGetUniformLocation(program, "useHalo");
     glUniform1i(uniformLocation, GL_FALSE);
 
     texture.detach();

@@ -15,6 +15,7 @@ layout (location = 3) in vec2 texCoords;
 out vec2 fs_texCoords;
 out vec4 fragmentColor;
 out vec4 normalPosition;
+out vec4 fs_normal;
 out vec4 worldPosition;
 out float vertexDistanceFromLight;
 
@@ -23,6 +24,7 @@ void main() {
     gl_Position = mvp * position;
     normalPosition = model*normal;
     worldPosition = model*position;
+    fs_normal = normal;
 
     if(useTexCoords)
         fs_texCoords = texCoords;

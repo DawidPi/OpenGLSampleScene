@@ -29,6 +29,8 @@ GLuint ShaderNecromanter::spawnShader(GLuint shaderType, const char *shaderPath)
         createdShaderFile.close();
         throw std::runtime_error(&errorLog[0]);
     }
+
+
     createdShaderFile.close();
     return createdShader;
 }
