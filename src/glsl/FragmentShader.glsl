@@ -51,6 +51,6 @@ void main(void)
         vec3 specularColor = vec3(0);// commonColor * pow(reflectFactor,50) * 25*lightPower/(distance(cameraPosition, worldPosition));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);
         if(useHalo)
-            fs_color.b = mix(bluething, fs_color.b, 0.5);
+            fs_color.b += bluething;
     }
 }
