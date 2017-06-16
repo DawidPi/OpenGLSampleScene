@@ -43,14 +43,20 @@ void main(void)
         float reflectFactor = cos(acos((dot(normalize(worldPosition - cameraPosition).xyz, normalize(normalPosition.xyz)))) - M_PI/2);
         reflectFactor = clamp(reflectFactor, 0.0, 1.0);//(0.0, reflectFactor);
         reflectFactor = reflectFactor;
-        float bluething =  1 * pow(reflectFactor,20);
+        float haloFactor = dot(normalize(incidentRayDiffuseVector), normalize(normalPosition));
+        haloFactor = cos( acos(haloFactor) * (3.0/4.0));
+        float antiHaloFactor = 1.0 - haloFactor;
+        haloFactor = clamp(haloFactor, 0.0, 1.0);
+        float haloSpectrumSize =  pow(reflectFactor,30);
+        //float whiteThing = pow()
 
         float lightPower = 320000;
         vec3 commonColor = chosenColor.rgb * lightColor /pow(vertexDistanceFromLight, 2);
         vec3 diffuseColor = commonColor * lightingFactor * lightPower;
         vec3 specularColor = vec3(0);// commonColor * pow(reflectFactor,50) * 25*lightPower/(distance(cameraPosition, worldPosition));
         fs_color = vec4(ambientColor + diffuseColor + specularColor, chosenColor.a);
-        if(useHalo)
-            fs_color.b += bluething;
+        if(useHalo){
+            fs_color.b += 8*haloSpectrumSize * haloFactor;
+        }
     }
 }
